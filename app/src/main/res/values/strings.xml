@@ -2,4 +2,16 @@
     <string name="app_name">3R Apps</string>
     <string name="subs_cart_home">Harga turun bertahap, beli/dropship 1 potong oke, pengiriman dengan JNE.</string>
     <string name="subs_gudang_home">Harga termurah, pembelian minimum 200 potong, kirim dengan ekspidisi pilihan Anda</string>
+
+    <string name="error_no_conection">No Internet Connection</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+
+    <string name="link_gudang">https://tigaer.id/stock</string>
+    <string name="link_order">not-yet</string>
+    <string name="link_rp100">https://tigaer.id/transactions</string>
+    <string name="link_tambahsaldo">https://tigaer.id/payment</string>
+    <string name="link_konfirmasi">http://mungil.com/checkout</string>
+    <string name="link_transaksi">https://tigaer.id/transactions</string>
+    <string name="link_profiles">http://mungil.com/senders</string>
+    <string name="link_arsip">http://mungil.com/archive</string>
 </resources>

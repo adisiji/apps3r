@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/ic_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_shopping_cart_black_24dp"/>
+
+    <TextView
+        android:id="@+id/tv_card_keranjang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Keranjang"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:layout_alignBottom="@id/ic_cart"
+        android:layout_toRightOf="@id/ic_cart"
+        android:layout_toEndOf="@id/ic_cart" />
+
+    <TextView
+        android:id="@+id/tv_card_harga_keranjang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ic_cart"
+        android:layout_margin="5dp"
+        android:text="Rp150.000"/>
+
+    <TextView
+        android:id="@+id/tv_card_total_keranjang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="7/10"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@id/tv_card_harga_keranjang"/>
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/btn_card_edit_keranjang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        fancy:fb_text="Edit"
+        fancy:fb_borderColor="@android:color/black"
+        fancy:fb_borderWidth="2dp"
+        fancy:fb_ghost="true"
+        fancy:fb_textColor="@color/black_toolbar"
+        fancy:fb_textSize="12sp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@id/tv_card_total_keranjang"
+        android:layout_margin="5dp"
+        android:clickable="true"/>
+
+</RelativeLayout>

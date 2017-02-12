@@ -1,5 +1,7 @@
 package nb.scode.a3rapps.localdata;
 
+import com.google.gson.Gson;
+
 import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;

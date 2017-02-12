@@ -2,11 +2,13 @@ package nb.scode.a3rapps.modelretro;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by neobyte on 2/10/2017.
  */
 
-public class Stamps {
+public class Stamps extends RealmObject{
 
     @SerializedName("ambilDataStatis")
     private long ambilDataStatis;

@@ -30,14 +30,19 @@ public class CustomJsInterface {
             Log.d(TAG, "Success "+obj.toString());
             int uid = obj.getInt("uid");
             String key = obj.getString("key");
-            callbackJs.sendMeta(uid,key);
+            String nama = obj.getString("nama");
+            int saldo = obj.getInt("saldo");
+            String prodTersimpan = obj.getString("produk_tersimpan");
+            int produkTersimpanMaks = obj.getInt("produk_tersimpan_maks");
+            callbackJs.sendMeta(uid,key, nama, saldo, prodTersimpan, produkTersimpanMaks);
         } catch (JSONException e) {
             Log.e(TAG, "Could not parse malformed JSON: \"" + result + "\"");
         }
     }
 
     public interface CallbackJs{
-        void sendMeta(int uid, String key);
+        void sendMeta(int uid, String key, String nama ,
+                      int saldo, String prodTersimpan, int prodTersimpanMaks);
     }
 
 }

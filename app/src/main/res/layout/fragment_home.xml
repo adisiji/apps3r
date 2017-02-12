@@ -6,7 +6,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/root_home">
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
@@ -45,6 +46,7 @@
         android:paddingLeft="20dp"
         fancy:fb_borderColor="@color/orange_border"
         fancy:fb_fontIconResource="&#xf07a;"
+        fancy:fb_iconPaddingLeft="16dp"
         fancy:fb_borderWidth="1dp"
         fancy:fb_focusColor="@color/dark_orange_btn"
         fancy:fb_iconPosition="right"
@@ -81,6 +83,7 @@
         android:paddingBottom="10dp"
         app:layout_constraintRight_toRightOf="@id/v2"
         app:layout_constraintLeft_toLeftOf="@id/v1"
+        fancy:fb_iconPaddingLeft="16dp"
         fancy:layout_constraintTop_toTopOf="@id/h1"
         fancy:fb_borderColor="@color/orange_border"
         fancy:fb_fontIconResource="&#xf1b3;"

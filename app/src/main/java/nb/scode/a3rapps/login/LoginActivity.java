@@ -21,11 +21,12 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Ca
     LoginPresenter mPresenter;
 
     @Override
-    public void sendMeta(final int uid, final String key){
+    public void sendMeta(final int uid, final String key, final String nama,
+                         final int saldo, final String prodTersimpan, final int prodTersimpanMaks) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mPresenter.saveMeta(uid, key);
+                mPresenter.saveMeta(uid, key, nama, saldo, prodTersimpan, prodTersimpanMaks);
             }
         });
     }
@@ -40,8 +41,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Ca
             ActivityUtils.addFragmentToActivity(
                     getSupportFragmentManager(),loginFragment,R.id.contentFrame);
         }
-        DaggerLoginComponent.builder().localDataComponent(DaggerLocalDataComponent.builder()
-                .appComponent(App.getAppComponent()).localDataModule(new LocalDataModule()).build())
+        DaggerLoginComponent.builder().localDataComponent(App.getDataComponent())
                 .loginPresenterModule(new LoginPresenterModule(loginFragment))
                 .build().inject(this);
     }

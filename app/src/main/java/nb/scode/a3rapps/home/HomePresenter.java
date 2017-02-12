@@ -1,5 +1,7 @@
 package nb.scode.a3rapps.home;
 
+import android.util.Log;
+
 import javax.inject.Inject;
 
 import nb.scode.a3rapps.localdata.LocalDataRepo;
@@ -11,6 +13,7 @@ import nb.scode.a3rapps.localdata.LocalDataTask;
 
 public class HomePresenter implements HomeContract.Presenter {
 
+    private final String TAG = HomePresenter.class.getSimpleName();
     private HomeContract.View view;
     private LocalDataRepo dataRepo;
 
@@ -24,21 +27,95 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void start(){
         if(dataRepo.getMeta()){
-            dataRepo.getStamp(new LocalDataTask.LoadTaskCallback(){
-                @Override
-                public void success(){
-
-                }
-
-                @Override
-                public void failed(String message){
-
-                }
-            });
+             //sudah ada, bandingkan dengan proses di cache
+            if(dataRepo.isEmptyLocalStamp()){
+                view.showFirstUpdate("Update first data");
+            }
+            else {
+                getStamp();
+            }
         }
         else {
             view.goLogin();
         }
+    }
+
+    @Override
+    public void getFirstData() {
+        getDataStatis();
+        getDataJne();
+        getStamp();
+    }
+
+    @Override
+    public void getStamp() {
+        dataRepo.getStamp(new LocalDataTask.UpdateCacheCallback() {
+
+            @Override
+            public void updateJne() {
+                view.showUpdateJne("Update JNE Data");
+            }
+
+            @Override
+            public void updateStatis() {
+                view.showUpdateStatis("Update Static Data");
+            }
+
+            @Override
+            public void success() {
+                view.showSuccessUpdate("Update success");
+                getPaket();
+            }
+
+            @Override
+            public void failed(String message) {
+                view.showFailedUpdate(message);
+            }
+        });
+    }
+
+    private void getPaket(){
+        dataRepo.getDaftarPaket(new LocalDataTask.LoadTaskCallback() {
+            @Override
+            public void success() {
+
+            }
+
+            @Override
+            public void failed(String message) {
+
+            }
+        });
+    }
+
+    @Override
+    public void getDataStatis() {
+        dataRepo.getDataStatis(new LocalDataTask.LoadTaskCallback() {
+            @Override
+            public void success() {
+                view.showSuccessUpdate("Success get JNE Data");
+            }
+
+            @Override
+            public void failed(String message) {
+
+            }
+        });
+    }
+
+    @Override
+    public void getDataJne() {
+        dataRepo.getDataJne(new LocalDataTask.LoadTaskCallback() {
+            @Override
+            public void success() {
+                view.showSuccessUpdate("Success get JNE Data");
+            }
+
+            @Override
+            public void failed(String message) {
+
+            }
+        });
     }
 
     @Override

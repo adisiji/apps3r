@@ -32,8 +32,9 @@ public class LoginPresenter implements LoginContract.Presenter {
     }
 
     @Override
-    public void saveMeta(int uid, String key){
-        dataRepo.setMeta(uid, key, new LocalDataTask.LoadTaskCallback() {
+    public void saveMeta(int uid, String key, String nama,
+                         int saldo, String prodTersimpan, int prodTersimpanMaks) {
+        dataRepo.setMeta(uid, key, nama, saldo, prodTersimpan, prodTersimpanMaks, new LocalDataTask.LoadTaskCallback() {
             @Override
             public void success() {
                 view.goHome();
@@ -45,5 +46,4 @@ public class LoginPresenter implements LoginContract.Presenter {
             }
         });
     }
-
 }

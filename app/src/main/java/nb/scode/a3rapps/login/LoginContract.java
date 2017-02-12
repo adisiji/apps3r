@@ -11,13 +11,15 @@ public interface LoginContract {
 
     interface Presenter extends BasePresenter {
 
-        void saveMeta(int uid, String key);
+        void saveMeta(int uid, String key, String nama ,
+                      int saldo, String prodTersimpan,
+                      int prodTersimpanMaks);
 
     }
 
     interface View extends BaseView<Presenter>{
 
-        String URL_LOGIN = "https://dev.tigaer.id/login?app";
+        String URL_LOGIN = "https://tigaer.id/login?app";
 
         void goHome();
 

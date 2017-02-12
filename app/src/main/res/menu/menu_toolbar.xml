@@ -1,0 +1,47 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.shehabic.droppy_samples.MainActivity">
+
+    <item
+        android:id="@+id/dropp1"
+        android:title="Home"
+        />
+
+    <group android:enabled="true">
+        <item
+            android:id="@+id/droppy2"
+            android:title="Ready"
+            />
+    </group>
+    <group android:enabled="true">
+        <item
+            android:id="@+id/dropp3"
+            android:title="Username" />
+
+        <item
+            android:id="@+id/droppy4"
+            android:title="Rp 100  Tambah Saldo" />
+    </group>
+    <group android:enabled="true">
+        <item
+            android:id="@+id/menu_catat"
+            android:title="Catat" />
+        <item
+            android:id="@+id/droppy5"
+            android:title="Konfirmasi" />
+        <item
+            android:id="@+id/droppy6"
+            android:title="Transaksi" />
+    </group>
+    <group android:enabled="true">
+        <item
+            android:id="@+id/droppy7"
+            android:title="Profiles" />
+        <item
+            android:id="@+id/droppy8"
+            android:title="Arsip" />
+        <item
+            android:id="@+id/droppy9"
+            android:title="Sign Out" />
+    </group>
+</menu>

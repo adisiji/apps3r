@@ -6,4 +6,5 @@
 
     <color name="orange_border">#fd8701</color>
     <color name="dark_orange_btn">#cf7107</color>
+    <color name="black_toolbar">#212121</color>
 </resources>

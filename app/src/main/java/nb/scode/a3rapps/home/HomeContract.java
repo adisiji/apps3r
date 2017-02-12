@@ -12,6 +12,14 @@ public interface HomeContract {
 
     interface Presenter extends BasePresenter {
 
+        void getFirstData();
+
+        void getDataJne();
+
+        void getDataStatis();
+
+        void getStamp();
+
     }
 
     interface View extends BaseView<Presenter> {
@@ -19,6 +27,16 @@ public interface HomeContract {
         String URL_GUDANG = "http://tigaer.id/gudang";
 
         void showLoading();
+
+        void showFirstUpdate(String message);
+
+        void showUpdateJne(String message);
+
+        void showUpdateStatis(String message);
+
+        void showSuccessUpdate(String message);
+
+        void showFailedUpdate(String message);
 
         void goLogin();
 

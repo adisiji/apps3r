@@ -79,6 +79,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         unbinder = ButterKnife.bind(this,root);
         WebSettings webSettings = wvLogin.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setAppCacheEnabled(false);
         webSettings.setSupportZoom(true);
         wvLogin.addJavascriptInterface(new CustomJsInterface(getActivity()),"HTMLOUT");
         wvLogin.setWebViewClient(new WebViewClient() {

@@ -5,11 +5,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.TextView;
+
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnClickListener;
+import com.orhanobut.dialogplus.OnItemClickListener;
+import com.orhanobut.dialogplus.ViewHolder;
+
+import org.w3c.dom.Text;
 
 import javax.inject.Inject;
 
@@ -32,6 +44,9 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     private Unbinder unbinder;
     private HomeContract.Presenter mPresenter;
     private Callback callback;
+    private Snackbar snackbar;
+    @BindView(R.id.root_home)
+    ConstraintLayout constraintLayout;
 
     public HomeFragment(){
 
@@ -80,14 +95,107 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
     }
 
+    @Override
+    public void showFailedUpdate(String message) {
+        if(snackbar != null && snackbar.isShown()){
+            snackbar.dismiss();
+        }
+        snackbar = Snackbar
+                .make(constraintLayout, message, Snackbar.LENGTH_SHORT);
+        snackbar.show();
+    }
+
+    @Override
+    public void showSuccessUpdate(String message) {
+        if(snackbar != null && snackbar.isShown()){
+            snackbar.dismiss();
+        }
+        snackbar = Snackbar
+                .make(constraintLayout, message, Snackbar.LENGTH_SHORT);
+        snackbar.show();
+    }
+
+    @Override
+    public void showUpdateStatis(String message) {
+        DialogPlus dialog = DialogPlus.newDialog(getActivity())
+                .setContentHolder(new ViewHolder(R.layout.dialog_confirm))
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        if(dialog.findViewById(R.id.btn_ok_dialog) == view){
+                            mPresenter.getDataStatis();
+                            dialog.dismiss();
+                        }
+                        else {
+                            dialog.dismiss();
+                        }
+                    }
+                })
+                .setExpanded(true, 400)  // This will enable the expand feature, (similar to android L share dialog)
+                .setCancelable(false)
+                .create();
+        TextView tv = (TextView)dialog.findViewById(R.id.content_confirm_message);
+        tv.setText(message);
+        dialog.show();
+    }
+
+    @Override
+    public void showUpdateJne(String message) {
+        DialogPlus dialog = DialogPlus.newDialog(getActivity())
+                .setContentHolder(new ViewHolder(R.layout.dialog_confirm))
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        if(dialog.findViewById(R.id.btn_ok_dialog) == view){
+                            mPresenter.getDataJne();
+                            dialog.dismiss();
+                        }
+                        else {
+                            dialog.dismiss();
+                        }
+                    }
+                })
+                .setExpanded(true, 400)  // This will enable the expand feature, (similar to android L share dialog)
+                .setCancelable(false)
+                .create();
+        TextView tv = (TextView)dialog.findViewById(R.id.content_confirm_message);
+        tv.setText(message);
+        dialog.show();
+    }
+
+    @Override
+    public void showFirstUpdate(String message) {
+        DialogPlus dialog = DialogPlus.newDialog(getActivity())
+                .setContentHolder(new ViewHolder(R.layout.dialog_confirm))
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        if(dialog.findViewById(R.id.btn_ok_dialog) == view){
+                            mPresenter.getFirstData();
+                            dialog.dismiss();
+                        }
+                        else {
+                            dialog.dismiss();
+                            getActivity().finish();
+                        }
+                    }
+                })
+                .setExpanded(true, 400)  // This will enable the expand feature, (similar to android L share dialog)
+                .setCancelable(false)
+                .create();
+        TextView tv = (TextView)dialog.findViewById(R.id.content_confirm_message);
+        tv.setText(message);
+        dialog.show();
+    }
+
     @OnClick(R.id.btn_webview_gudang)
     void gudang(){
-
+        callback.gudang();
     }
 
     @OnClick(R.id.btn_cart)
     void cart(){
-
+        callback.cart();
     }
 
     @Override
@@ -97,6 +205,8 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
     public interface Callback{
         void login();
+        void cart();
+        void gudang();
     }
 
 }
