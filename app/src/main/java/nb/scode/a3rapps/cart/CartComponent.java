@@ -10,7 +10,7 @@ import nb.scode.a3rapps.localdata.LocalDataComponent;
 
 @FragmentScoped
 @Component(dependencies = LocalDataComponent.class, modules = CartPresenterModule.class)
-public interface CartComponent {
+interface CartComponent {
 
     void inject(CartActivity cartActivity);
 

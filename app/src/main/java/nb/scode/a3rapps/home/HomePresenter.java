@@ -14,7 +14,7 @@ import nb.scode.a3rapps.localdata.LocalDataTask;
 public class HomePresenter implements HomeContract.Presenter {
 
     private final String TAG = HomePresenter.class.getSimpleName();
-    private HomeContract.View view;
+    private final HomeContract.View view;
     private LocalDataRepo dataRepo;
 
     @Inject
@@ -70,6 +70,7 @@ public class HomePresenter implements HomeContract.Presenter {
             @Override
             public void failed(String message) {
                 view.showFailedUpdate(message);
+                view.goLogin();
             }
         });
     }
@@ -93,7 +94,7 @@ public class HomePresenter implements HomeContract.Presenter {
         dataRepo.getDataStatis(new LocalDataTask.LoadTaskCallback() {
             @Override
             public void success() {
-                view.showSuccessUpdate("Success get JNE Data");
+                view.showSuccessUpdate("Success get Static Data");
             }
 
             @Override
@@ -116,11 +117,6 @@ public class HomePresenter implements HomeContract.Presenter {
 
             }
         });
-    }
-
-    @Override
-    public void destroy(){
-        view = null;
     }
 
 }

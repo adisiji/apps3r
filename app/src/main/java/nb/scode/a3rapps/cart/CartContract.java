@@ -19,6 +19,14 @@ public interface CartContract {
 
         String getName();
 
+        long getSaldo();
+
+        int getReqLimit();
+
+        int getReqCount();
+
+        int getTimeLimit();
+
     }
 
     interface View extends BaseView<Presenter>{

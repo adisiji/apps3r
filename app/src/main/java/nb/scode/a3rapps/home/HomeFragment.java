@@ -68,25 +68,27 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         callback = (Callback) context;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mPresenter.start();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this,root);
+        if(savedInstanceState==null){
+            mPresenter.start();
+        }
         return root;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mPresenter.destroy();
         unbinder.unbind();
     }
 

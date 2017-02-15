@@ -19,10 +19,13 @@ import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.modelrealm.JneRealm;
 import nb.scode.a3rapps.modelrealm.LastUpdateLocal;
 import nb.scode.a3rapps.modelrealm.MetaRealm;
+import nb.scode.a3rapps.modelretro.Colors;
 import nb.scode.a3rapps.modelretro.DataJne;
 import nb.scode.a3rapps.modelretro.DataStatis;
 import nb.scode.a3rapps.modelretro.DetailPackage;
 import nb.scode.a3rapps.modelretro.MainPackages;
+import nb.scode.a3rapps.modelretro.Products;
+import nb.scode.a3rapps.modelretro.Sizes;
 import nb.scode.a3rapps.modelretro.Stamps;
 import nb.scode.a3rapps.modelretro.StampsRetro;
 import nb.scode.a3rapps.modelretro.SubMainPackage;
@@ -55,13 +58,8 @@ public class LocalDataRepo implements LocalDataTask {
     @Override
     public boolean getMeta() {
         metaRealm = realm.where(MetaRealm.class).findFirst();
-        if(metaRealm!=null){
-            return true;
-        }
-        else {
-            //setDummy();
-            return false;
-        }
+        //setDummy();
+        return metaRealm != null;
     }
 
     @Override
@@ -87,11 +85,52 @@ public class LocalDataRepo implements LocalDataTask {
     }
 
     @Override
+    public int getSaldo() {
+        return metaRealm.getSaldo();
+    }
+
+    @Override
+    public int getTimeLimit() {
+        realm.beginTransaction();
+        SubMainPackage packet = realm.where(SubMainPackage.class).findFirst();
+        realm.commitTransaction();
+        if(packet!=null){
+            return packet.getTime_limit();
+        }
+        else {
+            return 0;
+        }
+    }
+
+    @Override
+    public int getReqLimit() {
+        realm.beginTransaction();
+        SubMainPackage packet = realm.where(SubMainPackage.class).findFirst();
+        realm.commitTransaction();
+        if(packet!=null){
+            return packet.getRequest_limit();
+        }
+        else {
+            return 0;
+        }
+    }
+
+    @Override
+    public int getReqCount() {
+        realm.beginTransaction();
+        SubMainPackage packet = realm.where(SubMainPackage.class).findFirst();
+        realm.commitTransaction();
+        if(packet!=null){
+            return packet.getRequest_count();
+        }
+        else {
+            return 0;
+        }
+    }
+
+    @Override
     public boolean isEmptyLocalStamp() {
-        if(realm.where(LastUpdateLocal.class).findFirst() == null)
-            return true;
-        else
-            return false;
+        return realm.where(LastUpdateLocal.class).findFirst() == null;
     }
 
     @Override
@@ -137,6 +176,9 @@ public class LocalDataRepo implements LocalDataTask {
                                     typesList.add(value.getMainTypes().get(key));
                                 }
                                 realm.beginTransaction();
+                                realm.insertOrUpdate(value.getColorsRealmList());
+                                realm.insertOrUpdate(value.getProductsStatisRealmList());
+                                realm.insertOrUpdate(value.getSizesRealmList());
                                 realm.insertOrUpdate(typesList);
                                 realm.commitTransaction();
                             }
@@ -202,18 +244,20 @@ public class LocalDataRepo implements LocalDataTask {
                         @Override
                         public void onNext(MainPackages value) {
                             if(value.getStatus()>0){
-                                List<DetailPackage> typesList = new ArrayList<>();
-                                for(Integer key: value.getPackageMap().keySet()){
-                                    typesList.add(value.getPackageMap().get(key));
+                                if(clearDaftarPaket()){
+                                    List<DetailPackage> typesList = new ArrayList<>();
+                                    for(Integer key: value.getPackageMap().keySet()){
+                                        typesList.add(value.getPackageMap().get(key));
+                                    }
+                                    SubMainPackage subMainPackage = new SubMainPackage();
+                                    subMainPackage.setRequest_count(value.getReq_count());
+                                    subMainPackage.setRequest_limit(value.getReq_limit());
+                                    subMainPackage.setTime_limit(value.getTime_limit());
+                                    realm.beginTransaction();
+                                    realm.insertOrUpdate(typesList);
+                                    realm.insertOrUpdate(subMainPackage);
+                                    realm.commitTransaction();
                                 }
-                                SubMainPackage subMainPackage = new SubMainPackage();
-                                subMainPackage.setRequest_count(value.getReq_count());
-                                subMainPackage.setRequest_limit(value.getReq_limit());
-                                subMainPackage.setTime_limit(value.getTime_limit());
-                                realm.beginTransaction();
-                                realm.insertOrUpdate(typesList);
-                                realm.insertOrUpdate(subMainPackage);
-                                realm.commitTransaction();
                             }
                         }
 
@@ -231,6 +275,31 @@ public class LocalDataRepo implements LocalDataTask {
         }
         else {
             callback.failed(no_inet_connet);
+        }
+    }
+
+    private boolean clearDaftarPaket(){
+        try {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmResults<DetailPackage> detailPackages = realm.where(DetailPackage.class).findAll();
+                    RealmResults<SubMainPackage> subMainPack = realm.where(SubMainPackage.class).findAll();
+                    subMainPack.deleteAllFromRealm();
+                    for(DetailPackage i: detailPackages){
+                        if(i!=null){
+                            if(i.getProducts()!=null){
+                                i.getProducts().deleteAllFromRealm();
+                            }
+                            i.deleteFromRealm();
+                        }
+                    }
+                }
+            });
+            return true;
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -289,6 +358,7 @@ public class LocalDataRepo implements LocalDataTask {
                                 }
                             }
                             else {
+                                callback.failed("go login");
                                 Log.d(TAG, "getStamp => error result stampx");
                             }
                         }
@@ -319,7 +389,9 @@ public class LocalDataRepo implements LocalDataTask {
     @Override
     public void clearMeta() {
         try {
+            realm.beginTransaction();
             realm.delete(MetaRealm.class);
+            realm.commitTransaction();
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
@@ -329,7 +401,9 @@ public class LocalDataRepo implements LocalDataTask {
     public void clearStamps() {
         if(!isEmptyLocalStamp()){
             try {
+                realm.beginTransaction();
                 realm.delete(Stamps.class);
+                realm.commitTransaction();
             }
             catch (IllegalStateException e){
                 e.printStackTrace();
@@ -343,5 +417,48 @@ public class LocalDataRepo implements LocalDataTask {
         RealmResults<DetailPackage> realmResults = realm.where(DetailPackage.class).findAll();
         realm.commitTransaction();
         return realmResults;
+    }
+
+    @Override
+    public RealmResults<Products> getRealmResultProducts() {
+        realm.beginTransaction();
+        RealmResults<Products> realmResults = realm.where(Products.class).findAll();
+        realm.commitTransaction();
+        Log.d(TAG,String.valueOf(realmResults.size()));
+        return realmResults;
+    }
+
+    @Override
+    public List<Colors> getListColors() {
+        realm.beginTransaction();
+        RealmResults<Colors> colorsList = realm.where(Colors.class).findAll();
+        Log.d(TAG+"COlor",String.valueOf(colorsList));
+        realm.commitTransaction();
+        return colorsList;
+    }
+
+    @Override
+    public List<Sizes> getListSizes() {
+        realm.beginTransaction();
+        RealmResults<Sizes> sizesList = realm.where(Sizes.class).findAll();
+        Log.d(TAG+"sizes",String.valueOf(sizesList));
+        realm.commitTransaction();
+        return sizesList;
+    }
+
+    @Override
+    public Products getProducts(String id) {
+        realm.beginTransaction();
+        Products products = realm.where(Products.class).contains("id",id).findFirst();
+        realm.commitTransaction();
+        return products;
+    }
+
+    @Override
+    public DetailPackage getDetailPackage(String id) {
+        realm.beginTransaction();
+        DetailPackage products = realm.where(DetailPackage.class).contains("packaged",id).findFirst();
+        realm.commitTransaction();
+        return products;
     }
 }

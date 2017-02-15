@@ -1,5 +1,6 @@
 package nb.scode.a3rapps.cart;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,21 +9,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import nb.scode.a3rapps.App;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.adapter.CartListAdapter;
 import nb.scode.a3rapps.adapter.RealmAdapter.RealmCartAdapter;
-import nb.scode.a3rapps.modelretro.DetailPackage;
+import nb.scode.a3rapps.catat.CatatActivity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -37,11 +34,19 @@ public class CartFragment extends Fragment implements CartContract.View {
     private Unbinder unbinder;
     @BindView(R.id.rvCart)
     RecyclerView rvCart;
+    @BindView(R.id.tv_tercatat_maks_cart)
+    TextView tvTercatat;
+    @BindView(R.id.tv_batas_simpan)
+    TextView tvBatasSimpan;
+    @BindView(R.id.progbar_cart)
+    RoundCornerProgressBar progressBar;
 
     CartListAdapter.CartEvent event = new CartListAdapter.CartEvent() {
         @Override
-        public void editPenerima(int pos) {
-
+        public void editPenerima(String pos) {
+            Intent intent = new Intent(getContext(), CatatActivity.class);
+            intent.putExtra("id",pos);
+            startActivity(intent);
         }
 
         @Override
@@ -49,6 +54,9 @@ public class CartFragment extends Fragment implements CartContract.View {
 
         }
 
+    };
+
+    CartListAdapter.KeranjangEvent keranjangEvent = new CartListAdapter.KeranjangEvent() {
         @Override
         public void editKeranjang(int pos) {
 
@@ -73,9 +81,17 @@ public class CartFragment extends Fragment implements CartContract.View {
         View root = inflater.inflate(R.layout.fragment_cart, container, false);
         unbinder = ButterKnife.bind(this,root);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        adapter = new CartListAdapter(getContext(), event);
+        adapter = new CartListAdapter(getContext(), event, keranjangEvent);
         rvCart.setLayoutManager(layoutManager);
         rvCart.setAdapter(adapter);
+        int a = mPresenter.getTimeLimit();
+        int b = mPresenter.getReqCount();
+        int c = mPresenter.getReqLimit();
+        progressBar.setProgress(b);
+        progressBar.setMax(c);
+        tvBatasSimpan.setText("Batas penyimpanan "+ String.valueOf(a) +" hari");
+        tvTercatat.setText("Tercatat "+String.valueOf(b)+" dari maks "+
+                String.valueOf(c)+" produk");
         return root;
     }
 

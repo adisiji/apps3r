@@ -7,4 +7,13 @@
     <color name="orange_border">#fd8701</color>
     <color name="dark_orange_btn">#cf7107</color>
     <color name="black_toolbar">#212121</color>
+    <color name="green_button">#689F38</color>
+    <color name="green_focus_button">#33691E</color>
+    <color name="blue_button">#2196F3</color>
+    <color name="blue_focus_button">#0D47A1</color>
+    <color name="amber_prog">#FFA000</color>
+    <color name="amber_prog_bg">#FF6F00</color>
+    <color name="yellow_focus">#977305</color>
+    <color name="grey_focus">#9E9E9E</color>
+    <color name="soft_grey_focus">#8a9a9a</color>
 </resources>

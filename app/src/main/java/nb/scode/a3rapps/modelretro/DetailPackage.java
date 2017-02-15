@@ -3,6 +3,7 @@ package nb.scode.a3rapps.modelretro;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -15,7 +16,7 @@ public class DetailPackage extends RealmObject {
     @PrimaryKey
     @SerializedName("package")
     @Expose
-    private int packaged;
+    private String packaged;
 
     @SerializedName("keranjang")
     @Expose
@@ -50,15 +51,19 @@ public class DetailPackage extends RealmObject {
     @Expose
     private Integer batasWaktu;
 
+    @SerializedName("products")
+    @Expose
+    private RealmList<Products> products;
+
     @SerializedName("recipient_detail")
     @Expose
     private RecipientDetail recipientDetailList;
 
-    public int getPackaged() {
+    public String getPackaged() {
         return packaged;
     }
 
-    public void setPackaged(int packaged) {
+    public void setPackaged(String packaged) {
         this.packaged = packaged;
     }
 
@@ -148,5 +153,13 @@ public class DetailPackage extends RealmObject {
 
     public void setRecipientDetailList(RecipientDetail recipientDetailList) {
         this.recipientDetailList = recipientDetailList;
+    }
+
+    public RealmList<Products> getProducts() {
+        return products;
+    }
+
+    public void setProducts(RealmList<Products> products) {
+        this.products = products;
     }
 }

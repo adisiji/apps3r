@@ -4,7 +4,10 @@ import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import nb.scode.a3rapps.modelretro.Colors;
 import nb.scode.a3rapps.modelretro.DetailPackage;
+import nb.scode.a3rapps.modelretro.Products;
+import nb.scode.a3rapps.modelretro.Sizes;
 
 /**
  * Created by neobyte on 2/9/2017.
@@ -19,6 +22,8 @@ public interface LocalDataTask {
                  int prodTersimpanMaks, LoadTaskCallback callback);
 
     String getName();
+
+    int getSaldo();
 
     void getDataStatis(LoadTaskCallback callback);
 
@@ -36,9 +41,25 @@ public interface LocalDataTask {
 
     long getLocalStampJne();
 
+    int getReqCount();
+
+    int getReqLimit();
+
+    int getTimeLimit();
+
     void compareCacheStamp();
 
     RealmResults<DetailPackage> getRealmResultDetailPackage();
+
+    RealmResults<Products> getRealmResultProducts();
+
+    Products getProducts(String id);
+
+    DetailPackage getDetailPackage(String id);
+
+    List<Sizes> getListSizes();
+
+    List<Colors> getListColors();
 
     void setStamp();
 

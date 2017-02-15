@@ -10,9 +10,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.realm.Realm;
 import mehdi.sakout.fancybuttons.FancyButton;
-import nb.scode.a3rapps.App;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.adapter.RealmAdapter.RealmRecyclerViewAdapater;
 import nb.scode.a3rapps.modelretro.DetailPackage;
@@ -24,16 +22,16 @@ import nb.scode.a3rapps.modelretro.DetailPackage;
 public class CartListAdapter extends RealmRecyclerViewAdapater<DetailPackage> {
 
     private Context context;
-    private Realm realm;
     private CartEvent cartEvent;
+    private KeranjangEvent keranjangEvent;
 
-    public CartListAdapter(Context context, CartEvent cartEvent) {
+    public CartListAdapter(Context context, CartEvent cartEvent, KeranjangEvent keranjangEvent) {
         this.cartEvent = cartEvent;
         this.context = context;
+        this.keranjangEvent = keranjangEvent;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
+    static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_card_penerima)
         TextView tvPenerima;
         @BindView(R.id.tv_card_harga_penerima)
@@ -46,54 +44,95 @@ public class CartListAdapter extends RealmRecyclerViewAdapater<DetailPackage> {
         FancyButton btnKonfirmasiPenerima;
         @BindView(R.id.btn_card_edit_penerima)
         FancyButton btnEditPenerima;
+
+
+        ViewHolder(View view){
+            super(view);
+            ButterKnife.bind(this,view);
+        }
+
+        void bind(final DetailPackage detailPackage, final CartEvent cartEvent, final int position){
+            tvPenerima.setText(detailPackage.getRecipientDetailList().getName());
+            tvHargaPenerima.setText(String.valueOf(detailPackage.getValue()));
+            tvCatInternal.setText(detailPackage.getPackagenote());
+            btnEditPenerima.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cartEvent.editPenerima(detailPackage.getPackaged());
+                }
+            });
+            btnKonfirmasiPenerima.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cartEvent.konfirmPenerima(position);
+                }
+            });
+        }
+    }
+
+    static class ViewHolder1 extends RecyclerView.ViewHolder {
         @BindView(R.id.btn_card_edit_keranjang)
         FancyButton btnEditKeranjang;
         @BindView(R.id.tv_card_harga_keranjang)
         TextView tvHargaKeranjang;
 
-        public ViewHolder(View view){
+        ViewHolder1(View view){
             super(view);
             ButterKnife.bind(this,view);
-
         }
 
+        void bind(DetailPackage detailPackage, final KeranjangEvent keranjangEvent, final int position){
+            tvHargaKeranjang.setText(String.valueOf(detailPackage.getValue()));
+            btnEditKeranjang.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    keranjangEvent.editKeranjang(position);
+                }
+            });
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return Integer.parseInt(getItem(position).getKeranjang());
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View recyclerView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_penerima, parent, false);
-        return new ViewHolder(recyclerView);
+        RecyclerView.ViewHolder viewHolder;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+        switch (viewType){
+            case 1: {
+                View v1 = inflater.inflate(R.layout.card_keranjang, parent, false);
+                viewHolder = new ViewHolder1(v1);
+                break;
+            }
+            default: {
+                View v0 = inflater.inflate(R.layout.card_penerima, parent, false);
+                viewHolder = new ViewHolder(v0);
+                break;
+            }
+        }
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
-        ViewHolder holder = (ViewHolder)viewHolder;
-        realm = App.getAppComponent().realm();
-
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         DetailPackage detailPackage = getItem(position);
-        holder.tvPenerima.setText(detailPackage.getRecipientDetailList().getName());
-        holder.tvHargaPenerima.setText(String.valueOf(detailPackage.getValue()));
-        holder.tvCatInternal.setText(detailPackage.getPackagenote());
+        switch (viewHolder.getItemViewType()){
+            case 1 : {
+                ViewHolder1 holder2 = (ViewHolder1)viewHolder;
+                holder2.bind(detailPackage, keranjangEvent, position);
+                break;
+            }
+            default: {
+                ViewHolder holder = (ViewHolder)viewHolder;
+                holder.bind(detailPackage,cartEvent,position);
+                break;
+            }
+        }
 
-        holder.btnEditPenerima.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cartEvent.editPenerima(position);
-            }
-        });
-        holder.btnEditKeranjang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cartEvent.editKeranjang(position);
-            }
-        });
-        holder.btnKonfirmasiPenerima.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cartEvent.konfirmPenerima(position);
-            }
-        });
     }
 
     @Override
@@ -106,10 +145,15 @@ public class CartListAdapter extends RealmRecyclerViewAdapater<DetailPackage> {
 
     public interface CartEvent {
 
-        void editPenerima(int pos);
+        void editPenerima(String id);
 
         void konfirmPenerima(int pos);
 
+    }
+
+    public interface KeranjangEvent {
+
         void editKeranjang(int pos);
+
     }
 }

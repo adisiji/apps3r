@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
-    android:padding="10dp">
+    android:padding="10dp" >
 
     <ImageView
         android:id="@+id/ic_mail"
@@ -76,7 +84,8 @@
         android:paddingRight="16dp"
         android:paddingLeft="16dp"
         fancy:fb_borderColor="@android:color/black"
-        fancy:fb_borderWidth="2dp"
+        fancy:fb_focusColor="@color/grey_focus"
+        fancy:fb_borderWidth="1dp"
         fancy:fb_ghost="true"
         fancy:fb_textColor="@color/black_toolbar"
         fancy:fb_textSize="12sp"
@@ -96,10 +105,11 @@
         android:paddingRight="16dp"
         android:paddingLeft="16dp"
         fancy:fb_borderColor="@android:color/black"
-        fancy:fb_borderWidth="2dp"
+        fancy:fb_borderWidth="1dp"
         fancy:fb_defaultColor="#FFEB3B"
         fancy:fb_textColor="@color/black_toolbar"
         fancy:fb_textSize="12sp"
+        fancy:fb_focusColor="@color/yellow_focus"
         android:layout_toLeftOf="@id/btn_card_edit_penerima"
         android:layout_toStartOf="@id/btn_card_edit_penerima"
         android:layout_below="@id/tv_card_total"
@@ -114,11 +124,5 @@
         android:layout_below="@id/btn_card_konfirmasi"
         android:textStyle="italic"/>
 
-    <include
-        layout="@layout/card_keranjang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_below="@id/cat_internal" />
-
 </RelativeLayout>
+</android.support.v7.widget.CardView>

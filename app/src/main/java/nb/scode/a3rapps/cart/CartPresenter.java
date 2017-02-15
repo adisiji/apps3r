@@ -31,17 +31,32 @@ public class CartPresenter implements CartContract.Presenter {
     }
 
     @Override
-    public void destroy() {
-
-    }
-
-    @Override
     public String getName() {
         return dataRepo.getName();
     }
 
     @Override
+    public int getTimeLimit() {
+        return dataRepo.getTimeLimit();
+    }
+
+    @Override
+    public int getReqCount() {
+        return dataRepo.getReqCount();
+    }
+
+    @Override
+    public int getReqLimit() {
+        return dataRepo.getReqLimit();
+    }
+
+    @Override
     public RealmResults<DetailPackage> getRealmResultDetailPackage() {
         return dataRepo.getRealmResultDetailPackage();
+    }
+
+    @Override
+    public long getSaldo() {
+        return dataRepo.getSaldo();
     }
 }

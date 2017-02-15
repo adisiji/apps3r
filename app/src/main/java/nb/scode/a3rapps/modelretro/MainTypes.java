@@ -6,5 +6,4 @@ package nb.scode.a3rapps.modelretro;
 
 public class MainTypes {
 
-
 }

@@ -94,7 +94,6 @@ public class LoginFragment extends Fragment implements LoginContract.View {
             public void onPageFinished(WebView view, String url) {
                 progressBar.setVisibility(View.GONE);
                 view.loadUrl("javascript:window.HTMLOUT.showHTML(document.getElementsByTagName('body')[0].innerHTML);");
-
                 super.onPageFinished(view, url);
             }
         });
@@ -105,7 +104,6 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mPresenter.destroy();
         unbinder.unbind();
     }
 

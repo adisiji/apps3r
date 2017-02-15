@@ -11,7 +11,7 @@ import nb.scode.a3rapps.localdata.LocalDataTask;
 
 public class LoginPresenter implements LoginContract.Presenter {
 
-    private LoginContract.View view;
+    private final LoginContract.View view;
     private LocalDataRepo dataRepo;
 
     @Inject
@@ -24,11 +24,6 @@ public class LoginPresenter implements LoginContract.Presenter {
     @Override
     public void start(){
 
-    }
-
-    @Override
-    public void destroy(){
-        view = null;
     }
 
     @Override

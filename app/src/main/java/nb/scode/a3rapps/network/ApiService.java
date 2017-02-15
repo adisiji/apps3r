@@ -16,7 +16,7 @@ public interface ApiService {
 
     String BASE_URL = "https://tigaer.id/";
 
-    @GET("/api?method=ambilMeta") //return --> Stamps
+    @GET("api?method=ambilMeta") //return --> Stamps
     Observable<StampsRetro> ambilMeta(@Query("uid") int uid,
                                       @Query("key") String key);
 
