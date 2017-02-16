@@ -432,7 +432,6 @@ public class LocalDataRepo implements LocalDataTask {
     public List<Colors> getListColors() {
         realm.beginTransaction();
         RealmResults<Colors> colorsList = realm.where(Colors.class).findAll();
-        Log.d(TAG+"COlor",String.valueOf(colorsList));
         realm.commitTransaction();
         return colorsList;
     }
@@ -441,7 +440,6 @@ public class LocalDataRepo implements LocalDataTask {
     public List<Sizes> getListSizes() {
         realm.beginTransaction();
         RealmResults<Sizes> sizesList = realm.where(Sizes.class).findAll();
-        Log.d(TAG+"sizes",String.valueOf(sizesList));
         realm.commitTransaction();
         return sizesList;
     }

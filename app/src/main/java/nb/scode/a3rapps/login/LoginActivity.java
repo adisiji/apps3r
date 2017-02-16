@@ -32,6 +32,16 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Ca
     }
 
     @Override
+    public void hideWeb() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mPresenter.hideWeb();
+            }
+        });
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);

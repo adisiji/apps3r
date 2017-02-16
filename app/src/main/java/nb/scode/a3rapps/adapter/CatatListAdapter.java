@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -54,17 +55,23 @@ public class CatatListAdapter extends RealmRecyclerViewAdapater<Products> {
         TextView tvDeskripsiProd;
         @BindView(R.id.iv_check_product)
         ImageView ivCheck;
+        @BindView(R.id.tv_nomor_jenis)
+        TextView tvNomor;
 
         ViewHolder (View view){
             super(view);
             ButterKnife.bind(this, view);
         }
 
-        void bind(Products products, List<Colors> colorsList, List<Sizes> sizesList){
-            spinnerUkuran.setItems(sizesList);
+        void bind(Products products, int pos, List<Colors> colorsList, List<Sizes> sizesList){
+            List<String> sizes = new ArrayList<>();
+            for(Sizes s: sizesList){
+                sizes.add(s.getName());
+            }
+            tvNomor.setText(String.valueOf(pos));
+            spinnerUkuran.setItems(sizes);
             etJumlah.setText(String.valueOf(products.getRequest()));
         }
-
     }
 
     @Override
@@ -77,7 +84,7 @@ public class CatatListAdapter extends RealmRecyclerViewAdapater<Products> {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         Products products = getItem(position);
         ViewHolder viewHolder1 = (ViewHolder)viewHolder;
-        viewHolder1.bind(products, colorsList, sizesList);
+        viewHolder1.bind(products, position+1, colorsList, sizesList);
     }
 
     @Override

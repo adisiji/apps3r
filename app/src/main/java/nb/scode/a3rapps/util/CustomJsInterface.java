@@ -27,6 +27,7 @@ public class CustomJsInterface {
     public void showHTML(String result) {
         try {
             JSONObject obj = new JSONObject(result);
+            callbackJs.hideWeb();
             Log.d(TAG, "Success "+obj.toString());
             int uid = obj.getInt("uid");
             String key = obj.getString("key");
@@ -43,6 +44,7 @@ public class CustomJsInterface {
     public interface CallbackJs{
         void sendMeta(int uid, String key, String nama ,
                       int saldo, String prodTersimpan, int prodTersimpanMaks);
+        void hideWeb();
     }
 
 }

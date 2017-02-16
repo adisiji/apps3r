@@ -7,7 +7,12 @@
     android:layout_marginRight="8dp"
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/soft_blue_header"/>
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
@@ -55,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ic_mail"
         android:text="Rp9.999.999"
-        android:layout_margin="5dp"/>
+        android:layout_marginTop="18dp"/>
 
     <ImageView
         android:id="@+id/iv_clock_red"
@@ -64,7 +69,7 @@
         android:src="@drawable/ic_watch_later_red_a400_24dp"
         android:layout_toRightOf="@id/tv_card_harga_penerima"
         android:layout_alignBottom="@id/tv_card_harga_penerima"
-        android:layout_below="@id/ic_mail"/>
+        android:layout_marginLeft="8dp"/>
 
     <TextView
         android:id="@+id/tv_card_total"
@@ -92,7 +97,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_below="@id/tv_card_total"
-        android:layout_margin="5dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="4dp"
         android:clickable="true"/>
 
     <mehdi.sakout.fancybuttons.FancyButton
@@ -113,7 +119,8 @@
         android:layout_toLeftOf="@id/btn_card_edit_penerima"
         android:layout_toStartOf="@id/btn_card_edit_penerima"
         android:layout_below="@id/tv_card_total"
-        android:layout_margin="5dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="4dp"
         android:clickable="true"/>
 
     <TextView
@@ -122,6 +129,7 @@
         android:layout_height="wrap_content"
         android:text="catatan internal"
         android:layout_below="@id/btn_card_konfirmasi"
+        android:layout_marginTop="12dp"
         android:textStyle="italic"/>
 
 </RelativeLayout>

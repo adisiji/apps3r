@@ -116,4 +116,8 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         callback.goHome();
     }
 
+    @Override
+    public void hideWeb() {
+        wvLogin.setVisibility(View.GONE);
+    }
 }

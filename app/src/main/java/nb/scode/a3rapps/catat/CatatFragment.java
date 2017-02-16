@@ -61,7 +61,7 @@ public class CatatFragment extends Fragment implements CatatContract.View {
         Bundle bundle = this.getArguments();
         String id = bundle.getString("id");
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        adapter = new CatatListAdapter(getContext(),presenter.getColorList(),presenter.getSizesList());
+        adapter = new CatatListAdapter(getContext(),presenter.getColorList(), presenter.getSizesList());
         rvCatat.setHasFixedSize(true);
         rvCatat.setLayoutManager(layoutManager);
         rvCatat.setAdapter(adapter);

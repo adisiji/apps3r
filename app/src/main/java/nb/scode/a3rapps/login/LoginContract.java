@@ -15,6 +15,8 @@ public interface LoginContract {
                       int saldo, String prodTersimpan,
                       int prodTersimpanMaks);
 
+        void hideWeb();
+
     }
 
     interface View extends BaseView<Presenter>{
@@ -22,6 +24,8 @@ public interface LoginContract {
         String URL_LOGIN = "https://tigaer.id/login?app";
 
         void goHome();
+
+        void hideWeb();
 
     }
 }
