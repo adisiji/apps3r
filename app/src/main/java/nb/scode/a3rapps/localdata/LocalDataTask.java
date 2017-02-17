@@ -2,7 +2,6 @@ package nb.scode.a3rapps.localdata;
 
 import java.util.List;
 
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import nb.scode.a3rapps.modelretro.Colors;
 import nb.scode.a3rapps.modelretro.DetailPackage;
@@ -51,9 +50,13 @@ public interface LocalDataTask {
 
     RealmResults<DetailPackage> getRealmResultDetailPackage();
 
-    RealmResults<Products> getRealmResultProducts();
+    RealmResults<Products> getRealmResultProducts(String id);
 
     Products getProducts(String id);
+
+    int getAvailProduct(String id);
+
+    int getReqProduct(String id);
 
     DetailPackage getDetailPackage(String id);
 

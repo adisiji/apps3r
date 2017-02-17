@@ -29,6 +29,7 @@ public class CatatFragment extends Fragment implements CatatContract.View {
     private CatatContract.Presenter presenter;
     private CatatListAdapter adapter;
     private Unbinder unbinder;
+    private String id;
 
     @BindView(R.id.rvCatat)
     RecyclerView rvCatat;
@@ -59,7 +60,7 @@ public class CatatFragment extends Fragment implements CatatContract.View {
         View root = inflater.inflate(R.layout.fragment_catat, container, false);
         unbinder = ButterKnife.bind(this, root);
         Bundle bundle = this.getArguments();
-        String id = bundle.getString("id");
+        id = bundle.getString("id");
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         adapter = new CatatListAdapter(getContext(),presenter.getColorList(), presenter.getSizesList());
         rvCatat.setHasFixedSize(true);
@@ -74,7 +75,7 @@ public class CatatFragment extends Fragment implements CatatContract.View {
     public void onResume() {
         super.onResume();
         RealmCatatAdapter realmCartAdapter = new RealmCatatAdapter(getContext(),
-                presenter.getRealmRsultsProduct());
+                presenter.getRealmResultsProduct(id));
         adapter.setRealmAdapter(realmCartAdapter);
         adapter.notifyDataSetChanged();
     }

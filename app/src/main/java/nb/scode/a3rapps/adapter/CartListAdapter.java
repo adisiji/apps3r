@@ -1,9 +1,8 @@
 package nb.scode.a3rapps.adapter;
 
 import android.content.Context;
-import android.os.SystemClock;
-import android.provider.Settings;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mehdi.sakout.fancybuttons.FancyButton;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.adapter.RealmAdapter.RealmRecyclerViewAdapater;
 import nb.scode.a3rapps.modelretro.DetailPackage;
+
+import static android.view.View.GONE;
 
 /**
  * Created by neobyte on 2/12/2017.
@@ -48,7 +53,8 @@ public class CartListAdapter extends RealmRecyclerViewAdapater<DetailPackage> {
         FancyButton btnKonfirmasiPenerima;
         @BindView(R.id.btn_card_edit_penerima)
         FancyButton btnEditPenerima;
-
+        @BindView(R.id.tv_card_total)
+        TextView total;
 
         ViewHolder(View view){
             super(view);
@@ -57,7 +63,10 @@ public class CartListAdapter extends RealmRecyclerViewAdapater<DetailPackage> {
 
         void bind(final DetailPackage detailPackage, final CartEvent cartEvent, final int position, Context context){
             tvPenerima.setText(detailPackage.getRecipientDetailList().getName());
-            tvHargaPenerima.setText(String.valueOf(detailPackage.getValue()));
+            NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            format.setCurrency(Currency.getInstance("IDR"));
+            String rupiahValue =  format.format(detailPackage.getValue());
+            tvHargaPenerima.setText("Rp"+rupiahValue.substring(3,rupiahValue.length()));
             tvCatInternal.setText(detailPackage.getPackagenote());
             btnEditPenerima.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -65,7 +74,8 @@ public class CartListAdapter extends RealmRecyclerViewAdapater<DetailPackage> {
                     cartEvent.editPenerima(detailPackage.getPackaged());
                 }
             });
-            long s = (System.currentTimeMillis() - detailPackage.getBatasWaktu())/ 86400;
+            double s = Math.floor((Math.floor(System.currentTimeMillis()/1000) - detailPackage.getBatasWaktu())/ 86400);
+            Log.d(detailPackage.getPackaged()+" S =>",String.valueOf(s));
             int pict;
             if(s<1) { //red clock
                 pict = R.drawable.ic_watch_later_red_a400_24dp;
@@ -80,6 +90,11 @@ public class CartListAdapter extends RealmRecyclerViewAdapater<DetailPackage> {
                     .load(pict)
                     .asBitmap()
                     .into(clock);
+            if(detailPackage.getConfirmable() == null || !detailPackage.getConfirmable()){
+                btnKonfirmasiPenerima.setVisibility(GONE);
+            }
+            total.setText(cartEvent.availProduct(detailPackage.getPackaged())+"/"+
+                    cartEvent.reqProduct(detailPackage.getPackaged()));
             btnKonfirmasiPenerima.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -147,7 +162,7 @@ public class CartListAdapter extends RealmRecyclerViewAdapater<DetailPackage> {
             }
             default: {
                 ViewHolder holder = (ViewHolder)viewHolder;
-                holder.bind(detailPackage,cartEvent,position, context);
+                holder.bind(detailPackage,cartEvent, position, context);
                 break;
             }
         }
@@ -165,6 +180,10 @@ public class CartListAdapter extends RealmRecyclerViewAdapater<DetailPackage> {
     public interface CartEvent {
 
         void editPenerima(String id);
+
+        int reqProduct(String id);
+
+        int availProduct(String id);
 
         void konfirmPenerima(int pos);
 

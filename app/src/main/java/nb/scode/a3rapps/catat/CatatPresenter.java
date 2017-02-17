@@ -48,8 +48,8 @@ public class CatatPresenter implements CatatContract.Presenter {
     }
 
     @Override
-    public RealmResults<Products> getRealmRsultsProduct() {
-        return dataRepo.getRealmResultProducts();
+    public RealmResults<Products> getRealmResultsProduct(String id) {
+        return dataRepo.getRealmResultProducts(id);
     }
 
     @Override

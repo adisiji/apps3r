@@ -24,7 +24,7 @@ public interface CatatContract {
 
         DetailPackage getDetailPackage(String id);
 
-        RealmResults<Products> getRealmRsultsProduct();
+        RealmResults<Products> getRealmResultsProduct(String id);
 
         String getName();
 

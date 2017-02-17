@@ -16,11 +16,13 @@ import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import mehdi.sakout.fancybuttons.FancyButton;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.adapter.CartListAdapter;
 import nb.scode.a3rapps.adapter.RealmAdapter.RealmCartAdapter;
 import nb.scode.a3rapps.catat.CatatActivity;
 
+import static android.view.View.GONE;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -40,6 +42,8 @@ public class CartFragment extends Fragment implements CartContract.View {
     TextView tvBatasSimpan;
     @BindView(R.id.progbar_cart)
     RoundCornerProgressBar progressBar;
+    @BindView(R.id.btn_paket_baru)
+    FancyButton btnPaketBaru;
 
     CartListAdapter.CartEvent event = new CartListAdapter.CartEvent() {
         @Override
@@ -47,6 +51,16 @@ public class CartFragment extends Fragment implements CartContract.View {
             Intent intent = new Intent(getContext(), CatatActivity.class);
             intent.putExtra("id",pos);
             startActivity(intent);
+        }
+
+        @Override
+        public int availProduct(String id) {
+            return mPresenter.getAvailProduct(id);
+        }
+
+        @Override
+        public int reqProduct(String id) {
+            return mPresenter.getReqPrduct(id);
         }
 
         @Override
@@ -87,6 +101,9 @@ public class CartFragment extends Fragment implements CartContract.View {
         int a = mPresenter.getTimeLimit();
         int b = mPresenter.getReqCount();
         int c = mPresenter.getReqLimit();
+        if(b>=c){
+            btnPaketBaru.setVisibility(GONE);
+        }
         progressBar.setProgress(b);
         progressBar.setMax(c);
         tvBatasSimpan.setText("Batas penyimpanan "+ String.valueOf(a) +" hari");
@@ -102,6 +119,12 @@ public class CartFragment extends Fragment implements CartContract.View {
                 mPresenter.getRealmResultDetailPackage());
         adapter.setRealmAdapter(realmCartAdapter);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override

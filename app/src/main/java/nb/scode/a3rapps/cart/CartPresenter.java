@@ -1,12 +1,9 @@
 package nb.scode.a3rapps.cart;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.realm.RealmResults;
 import nb.scode.a3rapps.localdata.LocalDataRepo;
-import nb.scode.a3rapps.localdata.LocalDataTask;
 import nb.scode.a3rapps.modelretro.DetailPackage;
 
 /**
@@ -58,5 +55,15 @@ public class CartPresenter implements CartContract.Presenter {
     @Override
     public long getSaldo() {
         return dataRepo.getSaldo();
+    }
+
+    @Override
+    public int getAvailProduct(String id) {
+        return dataRepo.getAvailProduct(id);
+    }
+
+    @Override
+    public int getReqPrduct(String id) {
+        return dataRepo.getReqProduct(id);
     }
 }

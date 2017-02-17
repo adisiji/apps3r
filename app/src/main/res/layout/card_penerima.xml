@@ -128,7 +128,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="catatan internal"
-        android:layout_below="@id/btn_card_konfirmasi"
+        android:layout_below="@id/btn_card_edit_penerima"
         android:layout_marginTop="12dp"
         android:textStyle="italic"/>
 

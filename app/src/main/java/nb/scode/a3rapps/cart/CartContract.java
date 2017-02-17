@@ -1,7 +1,5 @@
 package nb.scode.a3rapps.cart;
 
-import java.util.List;
-
 import io.realm.RealmResults;
 import nb.scode.a3rapps.BasePresenter;
 import nb.scode.a3rapps.BaseView;
@@ -26,6 +24,10 @@ public interface CartContract {
         int getReqCount();
 
         int getTimeLimit();
+
+        int getReqPrduct(String id);
+
+        int getAvailProduct(String id);
 
     }
 

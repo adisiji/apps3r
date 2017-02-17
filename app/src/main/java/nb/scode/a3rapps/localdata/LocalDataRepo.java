@@ -14,8 +14,6 @@ import io.reactivex.observers.ResourceObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import nb.scode.a3rapps.App;
-import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.modelrealm.JneRealm;
 import nb.scode.a3rapps.modelrealm.LastUpdateLocal;
 import nb.scode.a3rapps.modelrealm.MetaRealm;
@@ -47,6 +45,7 @@ public class LocalDataRepo implements LocalDataTask {
     private NetworkManager networkManager;
     private final String TAG = LocalDataRepo.class.getSimpleName();
     private static final String no_inet_connet = "No Internet Connection";
+    private int req=0, avail = 0;
 
     @Inject
     public LocalDataRepo(ApiService apiService, Realm realm, NetworkManager networkManager){
@@ -420,9 +419,10 @@ public class LocalDataRepo implements LocalDataTask {
     }
 
     @Override
-    public RealmResults<Products> getRealmResultProducts() {
+    public RealmResults<Products> getRealmResultProducts(String id) {
         realm.beginTransaction();
-        RealmResults<Products> realmResults = realm.where(Products.class).findAll();
+        DetailPackage detailPackage = realm.where(DetailPackage.class).contains("packaged",id).findFirst();
+        RealmResults<Products> realmResults = detailPackage.getProducts().where().findAll();
         realm.commitTransaction();
         Log.d(TAG,String.valueOf(realmResults.size()));
         return realmResults;
@@ -450,6 +450,38 @@ public class LocalDataRepo implements LocalDataTask {
         Products products = realm.where(Products.class).contains("id",id).findFirst();
         realm.commitTransaction();
         return products;
+    }
+
+    @Override
+    public int getReqProduct(final String id) {
+        req = 0;
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                DetailPackage detailPackages = realm.where(DetailPackage.class).contains("packaged", id).findFirst();
+                List<Products> products = detailPackages.getProducts();
+                for (Products p : products) {
+                    req += p.getRequest();
+                }
+            }
+        });
+        return req;
+    }
+
+    @Override
+    public int getAvailProduct(final String id) {
+        avail = 0;
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                DetailPackage detailPackages = realm.where(DetailPackage.class).contains("packaged",id).findFirst();
+                List<Products>  products = detailPackages.getProducts();
+                for(Products p : products) {
+                        avail += Integer.parseInt(p.getAvailable());
+                }
+            }
+        });
+        return avail;
     }
 
     @Override
