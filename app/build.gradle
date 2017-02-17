@@ -51,6 +51,7 @@ ext {
     playServicesVersion = '10.0.1'
     butterVersion = '8.5.1'
     guavaVersion = '20.0'
+    glideVersion='3.7.0'
     daggerVersion = '2.8'
     retrofitVersion = '2.1.0'
     rxjavaVersion = '2.0.1'
@@ -76,6 +77,9 @@ dependencies {
     //Butterknife
     compile "com.jakewharton:butterknife:$butterVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterVersion"
+
+    //Glide for load image
+    compile "com.github.bumptech.glide:glide:$glideVersion"
 
     //retrofit
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"

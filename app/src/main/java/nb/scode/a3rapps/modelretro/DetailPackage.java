@@ -49,7 +49,7 @@ public class DetailPackage extends RealmObject {
     private String packagenote;
     @SerializedName("batas_waktu")
     @Expose
-    private Integer batasWaktu;
+    private long batasWaktu;
 
     @SerializedName("products")
     @Expose
@@ -139,11 +139,11 @@ public class DetailPackage extends RealmObject {
         this.packagenote = packagenote;
     }
 
-    public Integer getBatasWaktu() {
+    public long getBatasWaktu() {
         return batasWaktu;
     }
 
-    public void setBatasWaktu(Integer batasWaktu) {
+    public void setBatasWaktu(long batasWaktu) {
         this.batasWaktu = batasWaktu;
     }
 

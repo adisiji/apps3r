@@ -1,12 +1,16 @@
 package nb.scode.a3rapps.adapter;
 
 import android.content.Context;
+import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +55,7 @@ public class CartListAdapter extends RealmRecyclerViewAdapater<DetailPackage> {
             ButterKnife.bind(this,view);
         }
 
-        void bind(final DetailPackage detailPackage, final CartEvent cartEvent, final int position){
+        void bind(final DetailPackage detailPackage, final CartEvent cartEvent, final int position, Context context){
             tvPenerima.setText(detailPackage.getRecipientDetailList().getName());
             tvHargaPenerima.setText(String.valueOf(detailPackage.getValue()));
             tvCatInternal.setText(detailPackage.getPackagenote());
@@ -61,6 +65,21 @@ public class CartListAdapter extends RealmRecyclerViewAdapater<DetailPackage> {
                     cartEvent.editPenerima(detailPackage.getPackaged());
                 }
             });
+            long s = (System.currentTimeMillis() - detailPackage.getBatasWaktu())/ 86400;
+            int pict;
+            if(s<1) { //red clock
+                pict = R.drawable.ic_watch_later_red_a400_24dp;
+            }
+            else if (s<2) {
+                pict = R.drawable.ic_watch_later_amber_500_24dp;
+            }
+            else {
+                pict = R.drawable.ic_watch_later_light_green_a700_24dp;
+            }
+            Glide.with(context)
+                    .load(pict)
+                    .asBitmap()
+                    .into(clock);
             btnKonfirmasiPenerima.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -128,7 +147,7 @@ public class CartListAdapter extends RealmRecyclerViewAdapater<DetailPackage> {
             }
             default: {
                 ViewHolder holder = (ViewHolder)viewHolder;
-                holder.bind(detailPackage,cartEvent,position);
+                holder.bind(detailPackage,cartEvent,position, context);
                 break;
             }
         }
