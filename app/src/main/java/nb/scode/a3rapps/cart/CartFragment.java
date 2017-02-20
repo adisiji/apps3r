@@ -34,6 +34,7 @@ public class CartFragment extends Fragment implements CartContract.View {
     private CartListAdapter adapter;
     private CartContract.Presenter mPresenter;
     private Unbinder unbinder;
+
     @BindView(R.id.rvCart)
     RecyclerView rvCart;
     @BindView(R.id.tv_tercatat_maks_cart)

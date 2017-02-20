@@ -1,6 +1,6 @@
 package nb.scode.a3rapps;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -19,7 +19,7 @@ import nb.scode.a3rapps.localdata.LocalDataModule;
  * Created by neobyte on 2/8/2017.
  */
 
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     private static LocalDataComponent dataComponent;
 

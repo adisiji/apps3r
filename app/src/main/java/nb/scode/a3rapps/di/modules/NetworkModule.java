@@ -17,6 +17,8 @@ import nb.scode.a3rapps.network.ApiService;
 import nb.scode.a3rapps.util.NetworkManager;
 import nb.scode.a3rapps.util.RealmIntegerListTypeAdapter;
 import nb.scode.a3rapps.util.RealmStringListTypeAdapter;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -34,28 +36,37 @@ public class NetworkModule {
 
     @Provides
     @PerApp
-    public NetworkManager networkManager(){
+    NetworkManager networkManager(){
         return new NetworkManager(context);
     }
 
     @Provides
-    @PerApp public ApiService provideApiService(){
+    @PerApp
+    ApiService provideApiService(){
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
         Gson gsonString = new GsonBuilder()
                 .registerTypeAdapter(new TypeToken<RealmList<RealmString>>(){}.getType(),
                         RealmStringListTypeAdapter.INSTANCE)
                 .setLenient()
                 .create();
+
         Gson gsonInt = new GsonBuilder()
                 .registerTypeAdapter(new TypeToken<RealmList<RealmInteger>>(){}.getType(),
                         RealmIntegerListTypeAdapter.INSTANCE)
                 .setLenient()
                 .create();
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ApiService.BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gsonString))
                 .addConverterFactory(GsonConverterFactory.create(gsonInt))
+                .baseUrl(ApiService.BASE_URL)
+                .client(client) //TODO: Delete when release
                 .build();
+
         return retrofit.create(ApiService.class);
     }
 }

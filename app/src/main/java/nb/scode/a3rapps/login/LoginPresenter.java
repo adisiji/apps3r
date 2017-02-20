@@ -12,7 +12,7 @@ import nb.scode.a3rapps.localdata.LocalDataTask;
 public class LoginPresenter implements LoginContract.Presenter {
 
     private final LoginContract.View view;
-    private LocalDataRepo dataRepo;
+    private final LocalDataTask dataRepo;
 
     @Inject
     public LoginPresenter(LoginContract.View view, LocalDataRepo localDataRepo){

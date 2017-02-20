@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import io.realm.RealmResults;
 import nb.scode.a3rapps.localdata.LocalDataRepo;
+import nb.scode.a3rapps.localdata.LocalDataTask;
 import nb.scode.a3rapps.modelretro.DetailPackage;
 
 /**
@@ -12,8 +13,8 @@ import nb.scode.a3rapps.modelretro.DetailPackage;
 
 public class CartPresenter implements CartContract.Presenter {
 
-    private CartContract.View mView;
-    private LocalDataRepo dataRepo;
+    private final CartContract.View mView;
+    private final LocalDataTask dataRepo;
 
     @Inject
     public CartPresenter(CartContract.View view, LocalDataRepo localDataRepo){

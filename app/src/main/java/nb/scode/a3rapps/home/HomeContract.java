@@ -1,6 +1,5 @@
 package nb.scode.a3rapps.home;
 
-import nb.scode.a3rapps.BaseModel;
 import nb.scode.a3rapps.BasePresenter;
 import nb.scode.a3rapps.BaseView;
 

@@ -1,7 +1,5 @@
 package nb.scode.a3rapps.home;
 
-import android.util.Log;
-
 import javax.inject.Inject;
 
 import nb.scode.a3rapps.localdata.LocalDataRepo;
@@ -15,7 +13,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
     private final String TAG = HomePresenter.class.getSimpleName();
     private final HomeContract.View view;
-    private LocalDataRepo dataRepo;
+    private final LocalDataTask dataRepo;
 
     @Inject
     public HomePresenter(HomeContract.View view, LocalDataRepo dataRepo){

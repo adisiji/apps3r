@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import io.realm.RealmResults;
 import nb.scode.a3rapps.localdata.LocalDataRepo;
+import nb.scode.a3rapps.localdata.LocalDataTask;
 import nb.scode.a3rapps.modelretro.Colors;
 import nb.scode.a3rapps.modelretro.DetailPackage;
 import nb.scode.a3rapps.modelretro.Products;
@@ -17,8 +18,8 @@ import nb.scode.a3rapps.modelretro.Sizes;
 
 public class CatatPresenter implements CatatContract.Presenter {
 
-    private CatatContract.View mView;
-    private LocalDataRepo dataRepo;
+    private final CatatContract.View mView;
+    private final LocalDataTask dataRepo;
 
     @Inject
     public CatatPresenter(CatatContract.View view, LocalDataRepo localDataRepo){
