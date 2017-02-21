@@ -93,7 +93,7 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
                                       int parentPosition,
                                       int childPosition,
                                       @NonNull Products products) {
-        viewHolder.bind(products);
+        viewHolder.bind(products, context);
     }
 
     @Override
