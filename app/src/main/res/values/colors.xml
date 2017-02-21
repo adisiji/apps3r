@@ -17,7 +17,7 @@
     <color name="yellow_focus">#977305</color>
     <color name="grey_focus">#9E9E9E</color>
     <color name="soft_grey_focus">#8a9a9a</color>
-
     <color name="soft_blue_header">#bbdefb</color>
     <color name="soft_green_header">#dcedc8</color>
+    <color name="white_200">#eeeeee</color>
 </resources>

@@ -22,8 +22,8 @@ android {
         applicationId "nb.scode.a3rapps"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 2
-        versionName "Mock 2"
+        versionCode 3
+        versionName "Mock 3"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -120,6 +120,9 @@ dependencies {
 
     //material spinner for product
     compile 'com.jaredrummler:material-spinner:1.1.0'
+
+    //Tooltip in preview products
+    compile 'it.sephiroth.android.library.targettooltip:target-tooltip-library:1.3.15'
 
     testCompile 'junit:junit:4.12'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta5'

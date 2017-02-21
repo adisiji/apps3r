@@ -15,6 +15,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.ChildViewHolder;
+import it.sephiroth.android.library.tooltip.Tooltip;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.modelretro.Products;
 
@@ -40,7 +41,7 @@ class ProductViewHolder extends ChildViewHolder {
         ButterKnife.bind(this,view);
     }
 
-    void bind(@NonNull Products products, @NonNull Context context){
+    void bind(@NonNull final Products products, @NonNull final Context context){
         title.setText(products.getId());
         harga.setText(priceFormat(products.getPrice()));
         qty.setText("x"+String.valueOf(products.getRequest()));
@@ -71,18 +72,34 @@ class ProductViewHolder extends ChildViewHolder {
                     .into(clock);
         }
 
-        int pictCek;
-
-        if(products.getRequest() > Integer.parseInt(products.getAvailable())){
-            pictCek = R.drawable.ic_check_box_grey_500_24dp;
+        final int pictCek, style;
+        boolean available = products.getRequest() < Integer.parseInt(products.getAvailable());
+        if(available){
+            pictCek = R.drawable.ic_check_box_green_700_24dp;
+            style = R.style.ToolTipLayoutGreenStyle;
         }
         else {
-            pictCek = R.drawable.ic_check_box_green_700_24dp;
+            pictCek = R.drawable.ic_check_box_grey_500_24dp;
+            style = R.style.ToolTipLayoutRedStyle;
         }
         Glide.with(context)
                 .load(pictCek)
                 .asBitmap()
                 .into(check);
+
+        check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Tooltip.TooltipView tooltip = Tooltip.make(context, new Tooltip.Builder(101).anchor(view,Tooltip.Gravity.TOP)
+                        .closePolicy(Tooltip.ClosePolicy.TOUCH_ANYWHERE_NO_CONSUME, 3000)
+                        .text(products.getAvailable()+"/"+String.valueOf(products.getRequest()))
+                        .fadeDuration(200)
+                        .fitToScreen(false)
+                        .withStyleId(style)
+                        .build());
+                tooltip.show();
+            }
+        });
     }
 
     private String priceFormat(int value){
