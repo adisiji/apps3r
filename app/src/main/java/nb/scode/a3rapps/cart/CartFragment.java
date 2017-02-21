@@ -16,11 +16,13 @@ import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.realm.Realm;
+import io.realm.RealmExpandableRecyclerAdapter;
 import mehdi.sakout.fancybuttons.FancyButton;
 import nb.scode.a3rapps.R;
-import nb.scode.a3rapps.adapter.CartListAdapter;
-import nb.scode.a3rapps.adapter.RealmAdapter.RealmCartAdapter;
+import nb.scode.a3rapps.adapter.ExpandCartAdapter;
 import nb.scode.a3rapps.catat.CatatActivity;
+import nb.scode.a3rapps.modelretro.DetailPackage;
 
 import static android.view.View.GONE;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -31,7 +33,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class CartFragment extends Fragment implements CartContract.View {
 
-    private CartListAdapter adapter;
+    private ExpandCartAdapter adapter;
     private CartContract.Presenter mPresenter;
     private Unbinder unbinder;
 
@@ -46,7 +48,7 @@ public class CartFragment extends Fragment implements CartContract.View {
     @BindView(R.id.btn_paket_baru)
     FancyButton btnPaketBaru;
 
-    CartListAdapter.CartEvent event = new CartListAdapter.CartEvent() {
+    ExpandCartAdapter.CartEvent cartEvent = new ExpandCartAdapter.CartEvent() {
         @Override
         public void editPenerima(String pos) {
             Intent intent = new Intent(getContext(), CatatActivity.class);
@@ -55,25 +57,17 @@ public class CartFragment extends Fragment implements CartContract.View {
         }
 
         @Override
-        public int availProduct(String id) {
+        public int reqProduct(String id) {
             return mPresenter.getAvailProduct(id);
         }
 
         @Override
-        public int reqProduct(String id) {
+        public int availProduct(String id) {
             return mPresenter.getReqPrduct(id);
         }
 
         @Override
         public void konfirmPenerima(int pos) {
-
-        }
-
-    };
-
-    CartListAdapter.KeranjangEvent keranjangEvent = new CartListAdapter.KeranjangEvent() {
-        @Override
-        public void editKeranjang(int pos) {
 
         }
     };
@@ -96,7 +90,19 @@ public class CartFragment extends Fragment implements CartContract.View {
         View root = inflater.inflate(R.layout.fragment_cart, container, false);
         unbinder = ButterKnife.bind(this,root);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        adapter = new CartListAdapter(getContext(), event, keranjangEvent);
+        Realm realm = Realm.getDefaultInstance();
+        adapter = new ExpandCartAdapter(realm.where(DetailPackage.class).findAll(),"package",getContext(),cartEvent);
+        adapter.setExpandCollapseListener(new RealmExpandableRecyclerAdapter.ExpandCollapseListener() {
+            @Override
+            public void onParentExpanded(int parentPosition) {
+
+            }
+
+            @Override
+            public void onParentCollapsed(int parentPosition) {
+
+            }
+        });
         rvCart.setLayoutManager(layoutManager);
         rvCart.setAdapter(adapter);
         int a = mPresenter.getTimeLimit();
@@ -116,10 +122,7 @@ public class CartFragment extends Fragment implements CartContract.View {
     @Override
     public void onResume() {
         super.onResume();
-        RealmCartAdapter realmCartAdapter = new RealmCartAdapter(getContext(),
-                mPresenter.getRealmResultDetailPackage());
-        adapter.setRealmAdapter(realmCartAdapter);
-        adapter.notifyDataSetChanged();
+
     }
 
     @Override

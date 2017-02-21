@@ -3,15 +3,18 @@ package nb.scode.a3rapps.modelretro;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.model.Parent;
 
 /**
  * Created by neobyte on 2/11/2017.
  */
 
-public class DetailPackage extends RealmObject {
+public class DetailPackage extends RealmObject implements Parent<Products> {
 
     @PrimaryKey
     @SerializedName("package")
@@ -58,6 +61,18 @@ public class DetailPackage extends RealmObject {
     @SerializedName("recipient_detail")
     @Expose
     private RecipientDetail recipientDetailList;
+
+    private boolean expanded;
+
+    @Override
+    public boolean isExpanded() {
+        return false;
+    }
+
+    @Override
+    public List<Products> getChildList() {
+        return products;
+    }
 
     public String getPackaged() {
         return packaged;
@@ -161,5 +176,9 @@ public class DetailPackage extends RealmObject {
 
     public void setProducts(RealmList<Products> products) {
         this.products = products;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
     }
 }

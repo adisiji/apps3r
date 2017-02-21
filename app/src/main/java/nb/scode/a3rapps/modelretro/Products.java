@@ -3,13 +3,16 @@ package nb.scode.a3rapps.modelretro;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmModel;
 import io.realm.RealmObject;
+import io.realm.RealmQuery;
+import io.realm.model.Child;
 
 /**
  * Created by neobyte on 2/13/2017.
  */
 
-public class Products extends RealmObject{
+public class Products extends RealmObject implements RealmModel, Child{
 
     @SerializedName("id")
     @Expose
@@ -25,11 +28,16 @@ public class Products extends RealmObject{
 
     @SerializedName("price")
     @Expose
-    private String price;
+    private int price;
 
     @SerializedName("expire_icon")
     @Expose
     private int expireIcon;
+
+    @Override
+    public RealmQuery<? extends Child> queryByPrimaryKey(RealmQuery<? extends Child> query) {
+        return query.or().equalTo("id", id);
+    }
 
     public String getId() {
         return id;
@@ -55,11 +63,11 @@ public class Products extends RealmObject{
         this.available = available;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -70,4 +78,5 @@ public class Products extends RealmObject{
     public void setExpireIcon(int expireIcon) {
         this.expireIcon = expireIcon;
     }
+
 }
