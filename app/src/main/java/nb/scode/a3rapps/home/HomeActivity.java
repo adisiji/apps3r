@@ -2,10 +2,10 @@ package nb.scode.a3rapps.home;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.transition.Slide;
-import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -39,7 +39,9 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.Call
         DaggerHomeComponent.builder().localDataComponent(App.getDataComponent())
                 .homePresenterModule(new HomePresenterModule(homeFragment))
                 .build().inject(this);
-        setTransition();
+        if(Build.VERSION.SDK_INT >= 21){
+            setTransition();
+        }
     }
 
     @TargetApi(21)
