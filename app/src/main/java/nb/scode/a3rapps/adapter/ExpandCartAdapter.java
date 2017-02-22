@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmExpandableRecyclerAdapter;
 import nb.scode.a3rapps.R;
@@ -30,12 +28,10 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
     private CartEvent cartEvent;
     private ProductEvent productEvent;
 
-    private List<DetailPackage> detailPackages;
     private int last;
     private Context context;
 
     public ExpandCartAdapter(@NonNull OrderedRealmCollection<DetailPackage> detailPackages,
-                             @NonNull String filterKey,
                              Context context,
                              CartEvent cartEvent,
                              ProductEvent productEvent) {
@@ -43,8 +39,6 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
         this.cartEvent = cartEvent;
         this.productEvent = productEvent;
         this.context = context;
-        this.detailPackages = detailPackages;
-
     }
 
     @UiThread
@@ -89,7 +83,7 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
     public void onBindParentViewHolder(@NonNull DetailPackageViewHolder viewHolder,
                                        int parentPosition,
                                        @NonNull DetailPackage detailPackage) {
-        last = detailPackages.get(parentPosition).getChildList().size();
+        last = getItem(parentPosition).getChildList().size();
         viewHolder.bind(detailPackage, context, cartEvent);
     }
 
@@ -104,7 +98,7 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
 
     @Override
     public int getParentViewType(int parentPosition) {
-        if (Integer.parseInt(detailPackages.get(parentPosition).getKeranjang())==0) {
+        if (getItem(parentPosition).getKeranjang().equals("0")) {
             return PARENT_PACKAGE;
         } else {
             return PARENT_KERANJANG;
@@ -113,7 +107,7 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
 
     @Override
     public int getChildViewType(int parentPosition, int childPosition) {
-        if (Integer.parseInt(detailPackages.get(parentPosition).getKeranjang())==0) {
+        if (getItem(parentPosition).getKeranjang().equals("0")) {
             return CHILD_PACKAGE;
         } else {
             return CHILD_KERANJANG;
@@ -122,7 +116,7 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
 
     @Override
     public boolean isParentViewType(int viewType) {
-        return viewType == PARENT_PACKAGE || viewType == PARENT_KERANJANG;
+        return viewType == PARENT_KERANJANG || viewType == PARENT_PACKAGE;
     }
 
     public interface CartEvent {

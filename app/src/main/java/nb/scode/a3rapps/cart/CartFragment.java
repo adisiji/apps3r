@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
@@ -16,13 +19,12 @@ import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.realm.Realm;
 import io.realm.RealmExpandableRecyclerAdapter;
+import io.realm.Sort;
 import mehdi.sakout.fancybuttons.FancyButton;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.adapter.ExpandCartAdapter;
 import nb.scode.a3rapps.catat.CatatActivity;
-import nb.scode.a3rapps.modelretro.DetailPackage;
 
 import static android.view.View.GONE;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -47,6 +49,8 @@ public class CartFragment extends Fragment implements CartContract.View {
     RoundCornerProgressBar progressBar;
     @BindView(R.id.btn_paket_baru)
     FancyButton btnPaketBaru;
+    @BindView(R.id.switch_urutkan)
+    SwitchCompat btnSwitch;
 
     ExpandCartAdapter.ProductEvent productEvent = new ExpandCartAdapter.ProductEvent() {
         @Override
@@ -112,9 +116,8 @@ public class CartFragment extends Fragment implements CartContract.View {
         View root = inflater.inflate(R.layout.fragment_cart, container, false);
         unbinder = ButterKnife.bind(this,root);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        Realm realm = Realm.getDefaultInstance();
-        adapter = new ExpandCartAdapter(realm.where(DetailPackage.class).findAll(),
-                "package", getContext(),cartEvent, productEvent);
+        adapter = new ExpandCartAdapter(mPresenter.getRealmResultDetailPackage(), getContext(),cartEvent, productEvent);
+
         adapter.setExpandCollapseListener(new RealmExpandableRecyclerAdapter.ExpandCollapseListener() {
             @Override
             public void onParentExpanded(int parentPosition) {
@@ -126,8 +129,20 @@ public class CartFragment extends Fragment implements CartContract.View {
 
             }
         });
+        rvCart.setItemAnimator(new DefaultItemAnimator());
         rvCart.setLayoutManager(layoutManager);
         rvCart.setAdapter(adapter);
+        btnSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    adapter.updateData(mPresenter.getRealmResultDetailPackage().sort("modified", Sort.DESCENDING));
+                }
+                else {
+                    adapter.updateData(mPresenter.getRealmResultDetailPackage());
+                }
+            }
+        });
         int a = mPresenter.getTimeLimit();
         int b = mPresenter.getReqCount();
         int c = mPresenter.getReqLimit();
