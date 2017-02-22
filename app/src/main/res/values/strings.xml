@@ -10,6 +10,7 @@
     <string name="hari">hari</string>
     <string name="text_move_package_product">Pindahkan produk ke paket lain</string>
     <string name="text_bottom_cart">Produk yang tercatat akan kita keep untuk anda.\nOleh karenanya, dengan berat hati beberapa batasan terpaksa harus ditetapkan:</string>
+    <string name="text_urutkan_switch">Urutkan berdasarkan waktu modifikasi</string>
 
     <string name="link_gudang">https://tigaer.id/stock</string>
     <string name="link_order">not-yet</string>
