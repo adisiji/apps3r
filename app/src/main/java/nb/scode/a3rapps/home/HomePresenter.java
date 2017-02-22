@@ -50,6 +50,11 @@ public class HomePresenter implements HomeContract.Presenter {
         dataRepo.getStamp(new LocalDataTask.UpdateCacheCallback() {
 
             @Override
+            public void updateJneStatis() {
+                view.showUpdateJneStatis("Update JNE & Static data");
+            }
+
+            @Override
             public void updateJne() {
                 view.showUpdateJne("Update JNE Data");
             }

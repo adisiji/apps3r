@@ -1,6 +1,7 @@
 package nb.scode.a3rapps.di;
 
 import com.google.gson.Gson;
+
 import dagger.Component;
 import io.realm.Realm;
 import nb.scode.a3rapps.di.modules.AppModule;

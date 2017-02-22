@@ -29,6 +29,8 @@ public interface HomeContract {
 
         void showFirstUpdate(String message);
 
+        void showUpdateJneStatis(String message);
+
         void showUpdateJne(String message);
 
         void showUpdateStatis(String message);

@@ -1,16 +1,14 @@
 package nb.scode.a3rapps.login;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
 import nb.scode.a3rapps.App;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.home.HomeActivity;
-import nb.scode.a3rapps.localdata.DaggerLocalDataComponent;
-import nb.scode.a3rapps.localdata.LocalDataModule;
 import nb.scode.a3rapps.util.ActivityUtils;
 import nb.scode.a3rapps.util.CustomJsInterface;
 

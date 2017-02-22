@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +28,10 @@ class ProductViewHolder extends ChildViewHolder {
 
     @BindView(R.id.tv_title_item)
     TextView title;
+    @BindView(R.id.tv_color)
+    TextView tvColor;
+    @BindView(R.id.tv_size)
+    TextView tvSize;
     @BindView(R.id.tv_card_harga_preview_item)
     TextView harga;
     @BindView(R.id.tv_quantity)
@@ -35,14 +40,29 @@ class ProductViewHolder extends ChildViewHolder {
     ImageView clock;
     @BindView(R.id.iv_check_item)
     ImageView check;
+    @BindView(R.id.rl_item_btm)
+    RelativeLayout layout;
 
     ProductViewHolder(@NonNull View view){
         super(view);
         ButterKnife.bind(this,view);
     }
 
-    void bind(@NonNull final Products products, @NonNull final Context context){
-        title.setText(products.getId());
+    void bind(@NonNull final Products products, @NonNull final Context context,
+              ExpandCartAdapter.ProductEvent productEvent, Boolean visible){
+        if(visible){
+            layout.setVisibility(View.VISIBLE);
+        }
+        else {
+            layout.setVisibility(View.GONE);
+        }
+        String nama = products.getId().substring(0,3);
+        String size = products.getId().substring(3,5);
+        String color = products.getId().substring(5,9);
+        String versi = products.getId().substring(9);
+        title.setText(productEvent.nameProduct(nama));
+        tvColor.setText(productEvent.colorProduct(color));
+        tvSize.setText(productEvent.sizeProduct(size));
         harga.setText(priceFormat(products.getPrice()));
         qty.setText("x"+String.valueOf(products.getRequest()));
         int pict=0;
@@ -73,7 +93,7 @@ class ProductViewHolder extends ChildViewHolder {
         }
 
         final int pictCek, style;
-        boolean available = products.getRequest() < Integer.parseInt(products.getAvailable());
+        boolean available = products.getRequest() <= Integer.parseInt(products.getAvailable());
         if(available){
             pictCek = R.drawable.ic_check_box_green_700_24dp;
             style = R.style.ToolTipLayoutGreenStyle;

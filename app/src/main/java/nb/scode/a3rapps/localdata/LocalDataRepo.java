@@ -175,10 +175,10 @@ public class LocalDataRepo implements LocalDataTask {
                                     typesList.add(value.getMainTypes().get(key));
                                 }
                                 realm.beginTransaction();
-                                realm.insertOrUpdate(value.getColorsRealmList());
-                                realm.insertOrUpdate(value.getProductsStatisRealmList());
-                                realm.insertOrUpdate(value.getSizesRealmList());
-                                realm.insertOrUpdate(typesList);
+                                realm.copyToRealm(value.getColorsRealmList());
+                                realm.copyToRealm(value.getProductsStatisRealmList());
+                                realm.copyToRealm(value.getSizesRealmList());
+                                realm.copyToRealm(typesList);
                                 realm.commitTransaction();
                             }
                         }
@@ -321,7 +321,16 @@ public class LocalDataRepo implements LocalDataTask {
                             if(value.getStatus()>0){
                                 Stamps stampx = value.getStamps();
                                 if(stampx!=null){
-                                    if(getLocalStampStatis() < stampx.getAmbilDataStatis() &&
+                                    if(getLocalStampStatis() == 0 && getLocalStampJne() ==0){
+                                        clearStamps();
+                                        realm.beginTransaction();
+                                        LastUpdateLocal local = new LastUpdateLocal();
+                                        local.setLastDataJne(stampx.getAmbilDataJne());
+                                        local.setLastDataStatis(stampx.getAmbilDataStatis());
+                                        realm.insertOrUpdate(local);
+                                        realm.commitTransaction();
+                                    }
+                                    else if(getLocalStampStatis() < stampx.getAmbilDataStatis() &&
                                             getLocalStampJne() < stampx.getAmbilDataJne()){
                                         clearStamps();
                                         realm.beginTransaction();
@@ -330,6 +339,7 @@ public class LocalDataRepo implements LocalDataTask {
                                         local.setLastDataStatis(stampx.getAmbilDataStatis());
                                         realm.insertOrUpdate(local);
                                         realm.commitTransaction();
+                                        callback.updateJneStatis();
                                     }
                                     else if(getLocalStampStatis() < stampx.getAmbilDataStatis()){
                                         realm.beginTransaction();
@@ -450,6 +460,30 @@ public class LocalDataRepo implements LocalDataTask {
         Products products = realm.where(Products.class).contains("id",id).findFirst();
         realm.commitTransaction();
         return products;
+    }
+
+    @Override
+    public String getProductName(String id) {
+        realm.beginTransaction();
+        SubMainTypes types = realm.where(SubMainTypes.class).contains("type",id).findFirst();
+        realm.commitTransaction();
+        return types.getReadable();
+    }
+
+    @Override
+    public String getProductSize(String id) {
+        realm.beginTransaction();
+        Sizes sizes = realm.where(Sizes.class).contains("size",id).findFirst();
+        realm.commitTransaction();
+        return sizes.getName();
+    }
+
+    @Override
+    public String getProductColor(String id) {
+        realm.beginTransaction();
+        Colors colors = realm.where(Colors.class).contains("code",id).findFirst();
+        realm.commitTransaction();
+        return colors.getName();
     }
 
     @Override

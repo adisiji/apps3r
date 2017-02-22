@@ -5,6 +5,8 @@
     android:layout_marginTop="12dp"
     android:layout_marginLeft="12dp"
     android:layout_marginRight="12dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <View

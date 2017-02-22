@@ -34,6 +34,21 @@ public class CartPresenter implements CartContract.Presenter {
     }
 
     @Override
+    public String getProductName(String id) {
+        return dataRepo.getProductName(id);
+    }
+
+    @Override
+    public String getProductSize(String id) {
+        return dataRepo.getProductSize(id);
+    }
+
+    @Override
+    public String getProductColor(String id) {
+        return dataRepo.getProductColor(id);
+    }
+
+    @Override
     public int getTimeLimit() {
         return dataRepo.getTimeLimit();
     }

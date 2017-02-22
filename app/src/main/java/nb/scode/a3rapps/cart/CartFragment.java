@@ -48,6 +48,28 @@ public class CartFragment extends Fragment implements CartContract.View {
     @BindView(R.id.btn_paket_baru)
     FancyButton btnPaketBaru;
 
+    ExpandCartAdapter.ProductEvent productEvent = new ExpandCartAdapter.ProductEvent() {
+        @Override
+        public String nameProduct(String id) {
+            return mPresenter.getProductName(id);
+        }
+
+        @Override
+        public String versiProduct(String id) {
+            return null;
+        }
+
+        @Override
+        public String colorProduct(String id) {
+            return mPresenter.getProductColor(id);
+        }
+
+        @Override
+        public String sizeProduct(String id) {
+            return mPresenter.getProductSize(id);
+        }
+    };
+
     ExpandCartAdapter.CartEvent cartEvent = new ExpandCartAdapter.CartEvent() {
         @Override
         public void editPenerima(String pos) {
@@ -91,7 +113,8 @@ public class CartFragment extends Fragment implements CartContract.View {
         unbinder = ButterKnife.bind(this,root);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         Realm realm = Realm.getDefaultInstance();
-        adapter = new ExpandCartAdapter(realm.where(DetailPackage.class).findAll(),"package",getContext(),cartEvent);
+        adapter = new ExpandCartAdapter(realm.where(DetailPackage.class).findAll(),
+                "package", getContext(),cartEvent, productEvent);
         adapter.setExpandCollapseListener(new RealmExpandableRecyclerAdapter.ExpandCollapseListener() {
             @Override
             public void onParentExpanded(int parentPosition) {

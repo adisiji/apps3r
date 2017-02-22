@@ -12,6 +12,7 @@ import retrofit2.http.Query;
  * Created by neobyte on 2/8/2017.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public interface ApiService {
 
     String BASE_URL = "https://tigaer.id/";

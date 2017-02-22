@@ -12,6 +12,7 @@
     <color name="blue_button">#2196F3</color>
     <color name="blue_focus_button">#0D47A1</color>
     <color name="blue_link">#303f9f</color>
+    <color name="orange_move">#ffe082</color>
     <color name="amber_prog">#FFA000</color>
     <color name="amber_prog_bg">#FF6F00</color>
     <color name="yellow_focus">#977305</color>

@@ -60,6 +60,12 @@ public interface LocalDataTask {
 
     DetailPackage getDetailPackage(String id);
 
+    String getProductName(String id);
+
+    String getProductColor(String id);
+
+    String getProductSize(String id);
+
     List<Sizes> getListSizes();
 
     List<Colors> getListColors();
@@ -84,6 +90,8 @@ public interface LocalDataTask {
     }
 
     interface UpdateCacheCallback{
+
+        void updateJneStatis();
 
         void updateJne();
 

@@ -6,6 +6,9 @@
     <string name="error_no_conection">No Internet Connection</string>
     <string name="title_activity_web_view">WebViewActivity</string>
 
+    <string name="text_move_preview_product">Pindahkan produk ke keranjang setelah</string>
+    <string name="hari">hari</string>
+    <string name="text_move_package_product">Pindahkan produk ke paket lain</string>
     <string name="text_bottom_cart">Produk yang tercatat akan kita keep untuk anda.\nOleh karenanya, dengan berat hati beberapa batasan terpaksa harus ditetapkan:</string>
 
     <string name="link_gudang">https://tigaer.id/stock</string>

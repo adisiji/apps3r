@@ -17,6 +17,12 @@ public interface CartContract {
 
         String getName();
 
+        String getProductName(String id);
+
+        String getProductColor(String id);
+
+        String getProductSize(String id);
+
         long getSaldo();
 
         int getReqLimit();

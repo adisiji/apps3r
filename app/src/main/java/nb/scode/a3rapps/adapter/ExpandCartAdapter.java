@@ -28,18 +28,23 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
     private static final int CHILD_KERANJANG = 3;
 
     private CartEvent cartEvent;
+    private ProductEvent productEvent;
 
     private List<DetailPackage> detailPackages;
+    private int last;
     private Context context;
 
     public ExpandCartAdapter(@NonNull OrderedRealmCollection<DetailPackage> detailPackages,
                              @NonNull String filterKey,
                              Context context,
-                             CartEvent cartEvent) {
+                             CartEvent cartEvent,
+                             ProductEvent productEvent) {
         super(detailPackages);
         this.cartEvent = cartEvent;
+        this.productEvent = productEvent;
         this.context = context;
         this.detailPackages = detailPackages;
+
     }
 
     @UiThread
@@ -84,6 +89,7 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
     public void onBindParentViewHolder(@NonNull DetailPackageViewHolder viewHolder,
                                        int parentPosition,
                                        @NonNull DetailPackage detailPackage) {
+        last = detailPackages.get(parentPosition).getChildList().size();
         viewHolder.bind(detailPackage, context, cartEvent);
     }
 
@@ -93,7 +99,7 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
                                       int parentPosition,
                                       int childPosition,
                                       @NonNull Products products) {
-        viewHolder.bind(products, context);
+        viewHolder.bind(products, context, productEvent, last == childPosition+1);
     }
 
     @Override
@@ -134,6 +140,18 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
     public interface KeranjangEvent {
 
         void editKeranjang(int pos);
+
+    }
+
+    public interface ProductEvent {
+
+        String nameProduct(String id);
+
+        String sizeProduct(String id);
+
+        String colorProduct(String id);
+
+        String versiProduct(String id);
 
     }
 

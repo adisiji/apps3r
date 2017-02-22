@@ -1,10 +1,9 @@
 package nb.scode.a3rapps.cart;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -24,7 +23,6 @@ import butterknife.Unbinder;
 import nb.scode.a3rapps.App;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.WebViewActivity;
-import nb.scode.a3rapps.catat.CatatActivity;
 import nb.scode.a3rapps.util.ActivityUtils;
 
 public class CartActivity extends AppCompatActivity {

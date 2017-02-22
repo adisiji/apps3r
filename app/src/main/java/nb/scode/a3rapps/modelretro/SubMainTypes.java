@@ -17,13 +17,21 @@ public class SubMainTypes extends RealmObject{
     private String type;
 
     @SerializedName("readable")
-    private boolean readable;
+    private String readable;
 
     @SerializedName("patterned")
     private int patterned;
 
     @SerializedName("sorter")
     private int sorter;
+
+    public String getReadable() {
+        return readable;
+    }
+
+    public void setReadable(String readable) {
+        this.readable = readable;
+    }
 
     @SerializedName("sizes")
     private RealmList<RealmString> sizes;
@@ -36,13 +44,6 @@ public class SubMainTypes extends RealmObject{
         this.type = type;
     }
 
-    public boolean isReadable() {
-        return readable;
-    }
-
-    public void setReadable(boolean readable) {
-        this.readable = readable;
-    }
 
     public int getPatterned() {
         return patterned;
