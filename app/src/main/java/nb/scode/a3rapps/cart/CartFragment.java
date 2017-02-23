@@ -115,7 +115,12 @@ public class CartFragment extends Fragment implements CartContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_cart, container, false);
         unbinder = ButterKnife.bind(this,root);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         adapter = new ExpandCartAdapter(mPresenter.getRealmResultDetailPackage(), getContext(),cartEvent, productEvent);
 
         adapter.setExpandCollapseListener(new RealmExpandableRecyclerAdapter.ExpandCollapseListener() {

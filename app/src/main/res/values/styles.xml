@@ -12,6 +12,11 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="ToolTipLayoutOrangeStyle" parent="ToolTipLayoutDefaultStyle">
+        <item name="ttlm_backgroundColor">@color/amber_prog</item>
+        <item name="android:textAppearance">@style/ToolTipTextStyle</item>
+    </style>
+
     <style name="ToolTipLayoutRedStyle" parent="ToolTipLayoutDefaultStyle">
         <item name="android:textAppearance">@style/ToolTipTextStyle</item>
     </style>
@@ -23,6 +28,7 @@
 
     <style name="ToolTipTextStyle">
         <item name="android:textColor">@color/white_200</item>
+        <item name="android:gravity"/>
     </style>
 
     <style name="MySwitch" parent="Theme.AppCompat.Light">

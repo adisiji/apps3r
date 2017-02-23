@@ -12,6 +12,10 @@
     <string name="text_bottom_cart">Produk yang tercatat akan kita keep untuk anda.\nOleh karenanya, dengan berat hati beberapa batasan terpaksa harus ditetapkan:</string>
     <string name="text_urutkan_switch">Urutkan berdasarkan waktu modifikasi</string>
 
+    <string name="batas_2_hari">Batas waktu \n2 hari lagi</string>
+    <string name="batas_1_hari">Batas waktu \n1 hari lagi</string>
+    <string name="batas_sebentar_lagi">Sebentar lagi \nterhapus</string>
+
     <string name="link_gudang">https://tigaer.id/stock</string>
     <string name="link_order">not-yet</string>
     <string name="link_rp100">https://tigaer.id/transactions</string>
