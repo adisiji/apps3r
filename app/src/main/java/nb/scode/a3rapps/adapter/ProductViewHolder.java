@@ -42,6 +42,8 @@ class ProductViewHolder extends ChildViewHolder {
     ImageView check;
     @BindView(R.id.rl_item_btm)
     RelativeLayout layout;
+    @BindView(R.id.title_pindah_paket)
+    TextView tvPindah;
 
     ProductViewHolder(@NonNull View view){
         super(view);
@@ -49,7 +51,8 @@ class ProductViewHolder extends ChildViewHolder {
     }
 
     void bind(@NonNull final Products products, @NonNull final Context context,
-              ExpandCartAdapter.ProductEvent productEvent, Boolean visible){
+              final ExpandCartAdapter.ProductEvent productEvent, Boolean visible,
+              final ExpandCartAdapter.PindahEvent pindahEvent, final int PackPos){
 
         int pict=0;
         final String ket;
@@ -119,6 +122,12 @@ class ProductViewHolder extends ChildViewHolder {
                 .asBitmap()
                 .into(check);
 
+        tvPindah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pindahEvent.pindahProductEvt(PackPos);
+            }
+        });
         clock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

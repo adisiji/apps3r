@@ -28,6 +28,13 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
     private CartEvent cartEvent;
     private ProductEvent productEvent;
 
+    private PindahEvent pindahEvent = new PindahEvent() {
+        @Override
+        public void pindahProductEvt(int pos) {
+                  productEvent.pindahProduct(getItem(pos).getPackaged());
+        }
+    };
+
     private int last;
     private Context context;
 
@@ -93,7 +100,7 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
                                       int parentPosition,
                                       int childPosition,
                                       @NonNull Products products) {
-        viewHolder.bind(products, context, productEvent, last == childPosition+1);
+        viewHolder.bind(products, context, productEvent, last == childPosition+1, pindahEvent, parentPosition);
     }
 
     @Override
@@ -147,6 +154,12 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
 
         String versiProduct(String id);
 
+        void pindahProduct(String id);
+
+    }
+
+    public interface PindahEvent {
+        void pindahProductEvt(int pos);
     }
 
 }

@@ -72,6 +72,13 @@ public class CartFragment extends Fragment implements CartContract.View {
         public String sizeProduct(String id) {
             return mPresenter.getProductSize(id);
         }
+
+        @Override
+        public void pindahProduct(String id) {
+            Intent intent = new Intent(getContext(), CatatActivity.class);
+            intent.putExtra("id",id);
+            startActivity(intent);
+        }
     };
 
     ExpandCartAdapter.CartEvent cartEvent = new ExpandCartAdapter.CartEvent() {
