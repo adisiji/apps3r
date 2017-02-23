@@ -16,6 +16,10 @@
     <string name="batas_1_hari">Batas waktu \n1 hari lagi</string>
     <string name="batas_sebentar_lagi">Sebentar lagi \nterhapus</string>
 
+    <string name="txt_pindahkan_produk">Pindahkan produk yang diberi tanda</string>
+    <string name="ke_paket">Ke Paket</string>
+    <string name="dahulukan_paket">Dahulukan paket yang belum ada</string>
+
     <string name="link_gudang">https://tigaer.id/stock</string>
     <string name="link_order">not-yet</string>
     <string name="link_rp100">https://tigaer.id/transactions</string>

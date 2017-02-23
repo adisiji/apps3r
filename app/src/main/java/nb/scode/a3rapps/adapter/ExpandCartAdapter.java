@@ -31,7 +31,7 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
     private PindahEvent pindahEvent = new PindahEvent() {
         @Override
         public void pindahProductEvt(int pos) {
-                  productEvent.pindahProduct(getItem(pos).getPackaged());
+                  productEvent.pindahProduct(getItem(pos));
         }
     };
 
@@ -154,11 +154,11 @@ public class ExpandCartAdapter extends RealmExpandableRecyclerAdapter<DetailPack
 
         String versiProduct(String id);
 
-        void pindahProduct(String id);
+        void pindahProduct(DetailPackage detailPackage);
 
     }
 
-    public interface PindahEvent {
+    interface PindahEvent {
         void pindahProductEvt(int pos);
     }
 

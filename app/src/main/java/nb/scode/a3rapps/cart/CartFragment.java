@@ -8,6 +8,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +17,22 @@ import android.widget.TextView;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.realm.RealmExpandableRecyclerAdapter;
+import io.realm.RealmResults;
 import io.realm.Sort;
 import mehdi.sakout.fancybuttons.FancyButton;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.adapter.ExpandCartAdapter;
 import nb.scode.a3rapps.catat.CatatActivity;
+import nb.scode.a3rapps.dialogs.PindahDialogFragment;
+import nb.scode.a3rapps.modelretro.DetailPackage;
+import nb.scode.a3rapps.modelretro.Products;
 
 import static android.view.View.GONE;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -33,11 +41,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by neobyte on 2/11/2017.
  */
 
-public class CartFragment extends Fragment implements CartContract.View {
+public class CartFragment extends Fragment implements CartContract.View, PindahDialogFragment.DialogCallback {
 
     private ExpandCartAdapter adapter;
     private CartContract.Presenter mPresenter;
     private Unbinder unbinder;
+    private String id;
 
     @BindView(R.id.rvCart)
     RecyclerView rvCart;
@@ -51,6 +60,48 @@ public class CartFragment extends Fragment implements CartContract.View {
     FancyButton btnPaketBaru;
     @BindView(R.id.switch_urutkan)
     SwitchCompat btnSwitch;
+
+    @Override
+    public void pindah() {
+        Log.d("Pindah","GOGOGO");
+    }
+
+    @Override
+    public RealmResults<Products> getProduct(String id) {
+        return mPresenter.getRealmResultsProduct(id);
+    }
+
+    @Override
+    public String versiProduct(String id) {
+        return null;
+    }
+
+    @Override
+    public String colorProduct(String id) {
+        return mPresenter.getProductColor(id);
+    }
+
+    @Override
+    public String sizeProduct(String id) {
+        return mPresenter.getProductSize(id);
+    }
+
+    @Override
+    public String nameProduct(String id) {
+        return mPresenter.getProductName(id);
+    }
+
+    @Override
+    public List<String> listPenerima() {
+        List<String> hasil = new ArrayList<>();
+        List<DetailPackage> detailPackageList = mPresenter.getRealmResultDetailPackage();
+        for(DetailPackage detailPackage: detailPackageList){
+            if(detailPackage.getKeranjang().equals("0")){
+                hasil.add(detailPackage.getRecipientDetailList().getName());
+            }
+        }
+        return hasil;
+    }
 
     ExpandCartAdapter.ProductEvent productEvent = new ExpandCartAdapter.ProductEvent() {
         @Override
@@ -74,10 +125,8 @@ public class CartFragment extends Fragment implements CartContract.View {
         }
 
         @Override
-        public void pindahProduct(String id) {
-            Intent intent = new Intent(getContext(), CatatActivity.class);
-            intent.putExtra("id",id);
-            startActivity(intent);
+        public void pindahProduct(DetailPackage detailPackage) {
+            showDialog(detailPackage.getPackaged());
         }
     };
 
@@ -185,4 +234,11 @@ public class CartFragment extends Fragment implements CartContract.View {
     public void setPresenter(CartContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter,"Presenter cannot be null");
     }
+
+    private void showDialog(String id){
+        PindahDialogFragment pindahDialogFragment = PindahDialogFragment.newInstance(id,8,8f,true,true);
+        pindahDialogFragment.setTargetFragment(this,1);
+        pindahDialogFragment.show(getFragmentManager(),"dialog");
+    }
+
 }

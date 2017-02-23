@@ -6,6 +6,7 @@ import io.realm.RealmResults;
 import nb.scode.a3rapps.localdata.LocalDataRepo;
 import nb.scode.a3rapps.localdata.LocalDataTask;
 import nb.scode.a3rapps.modelretro.DetailPackage;
+import nb.scode.a3rapps.modelretro.Products;
 
 /**
  * Created by neobyte on 2/11/2017.
@@ -69,6 +70,11 @@ public class CartPresenter implements CartContract.Presenter {
     }
 
     @Override
+    public RealmResults<Products> getRealmResultsProduct(String id) {
+        return dataRepo.getRealmResultProducts(id);
+    }
+
+    @Override
     public long getSaldo() {
         return dataRepo.getSaldo();
     }
@@ -82,4 +88,5 @@ public class CartPresenter implements CartContract.Presenter {
     public int getReqPrduct(String id) {
         return dataRepo.getReqProduct(id);
     }
+
 }
