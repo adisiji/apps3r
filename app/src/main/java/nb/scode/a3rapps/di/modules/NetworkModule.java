@@ -14,11 +14,11 @@ import nb.scode.a3rapps.di.scope.PerApp;
 import nb.scode.a3rapps.modelretro.RealmInteger;
 import nb.scode.a3rapps.modelretro.RealmString;
 import nb.scode.a3rapps.network.ApiService;
+import nb.scode.a3rapps.util.HttpInterceptor;
 import nb.scode.a3rapps.util.NetworkManager;
 import nb.scode.a3rapps.util.RealmIntegerListTypeAdapter;
 import nb.scode.a3rapps.util.RealmStringListTypeAdapter;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -42,9 +42,14 @@ public class NetworkModule {
 
     @Provides
     @PerApp
-    ApiService provideApiService(){
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+    HttpInterceptor interceptor(){
+        return new HttpInterceptor();
+    }
+
+    @Provides
+    @PerApp
+    ApiService provideApiService(HttpInterceptor interceptor){
+
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         Gson gsonString = new GsonBuilder()

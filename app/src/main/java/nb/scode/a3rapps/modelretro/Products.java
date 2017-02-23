@@ -3,7 +3,6 @@ package nb.scode.a3rapps.modelretro;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmModel;
 import io.realm.RealmObject;
 import io.realm.RealmQuery;
 import io.realm.model.Child;
@@ -12,7 +11,7 @@ import io.realm.model.Child;
  * Created by neobyte on 2/13/2017.
  */
 
-public class Products extends RealmObject implements RealmModel, Child{
+public class Products extends RealmObject implements Child{
 
     @SerializedName("id")
     @Expose

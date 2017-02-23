@@ -14,7 +14,6 @@ import io.reactivex.observers.ResourceObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import nb.scode.a3rapps.modelrealm.JneRealm;
 import nb.scode.a3rapps.modelrealm.LastUpdateLocal;
 import nb.scode.a3rapps.modelrealm.MetaRealm;
 import nb.scode.a3rapps.modelretro.Colors;
@@ -43,7 +42,7 @@ public class LocalDataRepo implements LocalDataTask {
     private Gson gson;
     private Realm realm;
     private NetworkManager networkManager;
-    private final String TAG = LocalDataRepo.class.getSimpleName();
+    private static final String TAG = LocalDataRepo.class.getSimpleName();
     private static final String no_inet_connet = "No Internet Connection";
     private int req=0, avail = 0;
 
@@ -163,34 +162,43 @@ public class LocalDataRepo implements LocalDataTask {
     public void getDataStatis(final LoadTaskCallback callback) {
         if(networkManager.isConnected()){
             apiService.ambilDataStatis(metaRealm.getId(),metaRealm.getKey())
-                    .subscribeOn(Schedulers.newThread())
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new ResourceObserver<DataStatis>() {
                         @Override
-                        public void onNext(DataStatis value) {
+                        public void onNext(final DataStatis value) {
                             if(value.getStatus() > 0){
                                 Log.d(TAG,"next->"+value.getMainTypes().keySet());
-                                List<SubMainTypes> typesList = new ArrayList<>();
+                                final List<SubMainTypes> typesList = new ArrayList<>();
                                 for(String key: value.getMainTypes().keySet()){
                                     typesList.add(value.getMainTypes().get(key));
                                 }
-                                realm.beginTransaction();
-                                realm.copyToRealm(value.getColorsRealmList());
-                                realm.copyToRealm(value.getProductsStatisRealmList());
-                                realm.copyToRealm(value.getSizesRealmList());
-                                realm.copyToRealm(typesList);
-                                realm.commitTransaction();
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        realm.copyToRealm(value.getColorsRealmList());
+                                        realm.copyToRealm(value.getProductsStatisRealmList());
+                                        realm.copyToRealm(value.getSizesRealmList());
+                                        realm.copyToRealm(typesList);
+                                    }
+                                }, new Realm.Transaction.OnSuccess(){
+                                    @Override
+                                    public void onSuccess() {
+                                        callback.success();
+                                    }
+                                });
                             }
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             Log.e(TAG,"getDataStatis Error -> "+e.getMessage());
+                            callback.failed(e.getMessage());
                         }
 
                         @Override
                         public void onComplete() {
-                            callback.success();
+
                         }
                     });
         }
@@ -203,27 +211,35 @@ public class LocalDataRepo implements LocalDataTask {
     public void getDataJne(final LoadTaskCallback callback) {
         if(networkManager.isConnected()){
             apiService.ambilDataJne(metaRealm.getId(),metaRealm.getKey())
-                    .subscribeOn(Schedulers.newThread())
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new ResourceObserver<DataJne>() {
                         @Override
-                        public void onNext(DataJne value) {
+                        public void onNext(final DataJne value) {
                             if(value.getStatus() > 0){
-                                realm.beginTransaction();
-                                List<JneRealm> jneRealmList = value.getListJne();
-                                realm.insertOrUpdate(jneRealmList);
-                                realm.commitTransaction();
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        realm.copyToRealm(value.getListJne());
+                                    }
+                                }, new Realm.Transaction.OnSuccess(){
+                                    @Override
+                                    public void onSuccess() {
+                                        callback.success();
+                                    }
+                                });
                             }
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             Log.e(TAG,"getDataJne Error -> "+e.getMessage());
+                            callback.failed(e.getMessage());
                         }
 
                         @Override
                         public void onComplete() {
-                            callback.success();
+
                         }
                     });
         }
@@ -237,25 +253,34 @@ public class LocalDataRepo implements LocalDataTask {
     public void getDaftarPaket(final LoadTaskCallback callback) {
         if(networkManager.isConnected()){
             apiService.ambilDaftarPaket(metaRealm.getId(),metaRealm.getKey())
-                    .subscribeOn(Schedulers.newThread())
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new ResourceObserver<MainPackages>() {
                         @Override
                         public void onNext(MainPackages value) {
                             if(value.getStatus()>0){
                                 if(clearDaftarPaket()){
-                                    List<DetailPackage> typesList = new ArrayList<>();
+                                    final List<DetailPackage> typesList = new ArrayList<>();
                                     for(Integer key: value.getPackageMap().keySet()){
                                         typesList.add(value.getPackageMap().get(key));
                                     }
-                                    SubMainPackage subMainPackage = new SubMainPackage();
+                                    final SubMainPackage subMainPackage = new SubMainPackage();
                                     subMainPackage.setRequest_count(value.getReq_count());
                                     subMainPackage.setRequest_limit(value.getReq_limit());
                                     subMainPackage.setTime_limit(value.getTime_limit());
-                                    realm.beginTransaction();
-                                    realm.insertOrUpdate(typesList);
-                                    realm.insertOrUpdate(subMainPackage);
-                                    realm.commitTransaction();
+                                    realm.executeTransactionAsync(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            realm.copyToRealm(typesList);
+                                            realm.copyToRealm(subMainPackage);
+                                        }
+                                    }, new Realm.Transaction.OnSuccess() {
+                                        @Override
+                                        public void onSuccess() {
+                                            Log.d(TAG, "getDaftarPaket => Completed");
+                                            callback.success();
+                                        }
+                                    });
                                 }
                             }
                         }
@@ -263,12 +288,12 @@ public class LocalDataRepo implements LocalDataTask {
                         @Override
                         public void onError(Throwable e) {
                             Log.e(TAG,"getDaftarPaket Error -> "+e.getMessage());
+                            callback.failed(e.getMessage());
                         }
 
                         @Override
                         public void onComplete() {
-                            Log.d(TAG, "getDaftarPaket => Completed");
-                            callback.success();
+
                         }
                     });
         }
@@ -313,7 +338,7 @@ public class LocalDataRepo implements LocalDataTask {
                 +" key : "+String.valueOf(metaRealm.getKey()));
         if(networkManager.isConnected()){
             apiService.ambilMeta(metaRealm.getId(),metaRealm.getKey())
-                    .subscribeOn(Schedulers.newThread())
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new ResourceObserver<StampsRetro>() {
                         @Override
@@ -322,7 +347,6 @@ public class LocalDataRepo implements LocalDataTask {
                                 Stamps stampx = value.getStamps();
                                 if(stampx!=null){
                                     if(getLocalStampStatis() == 0 && getLocalStampJne() ==0){
-                                        clearStamps();
                                         realm.beginTransaction();
                                         LastUpdateLocal local = new LastUpdateLocal();
                                         local.setLastDataJne(stampx.getAmbilDataJne());
