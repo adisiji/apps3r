@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -60,6 +59,78 @@ public class CartFragment extends Fragment implements CartContract.View, PindahD
     FancyButton btnPaketBaru;
     @BindView(R.id.switch_urutkan)
     SwitchCompat btnSwitch;
+
+    public CartFragment() {
+    }
+
+    public static CartFragment newInstance(){
+        return new CartFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_cart, container, false);
+        unbinder = ButterKnife.bind(this,root);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setAutoMeasureEnabled(true);
+        adapter = new ExpandCartAdapter(mPresenter.getRealmResultDetailPackage(), getContext(),cartEvent, productEvent);
+
+        adapter.setExpandCollapseListener(new RealmExpandableRecyclerAdapter.ExpandCollapseListener() {
+            @Override
+            public void onParentExpanded(int parentPosition) {
+                rvCart.invalidate();
+            }
+
+            @Override
+            public void onParentCollapsed(int parentPosition) {
+                rvCart.invalidate();
+            }
+        });
+
+        rvCart.setLayoutManager(layoutManager);
+        rvCart.setAdapter(adapter);
+        btnSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    adapter.updateData(mPresenter.getRealmResultDetailPackage().sort("modified", Sort.DESCENDING));
+                }
+                else {
+                    adapter.updateData(mPresenter.getRealmResultDetailPackage());
+                }
+            }
+        });
+        int a = mPresenter.getTimeLimit();
+        int b = mPresenter.getReqCount();
+        int c = mPresenter.getReqLimit();
+        if(b>=c){
+            btnPaketBaru.setVisibility(GONE);
+        }
+        progressBar.setProgress(b);
+        progressBar.setMax(c);
+        tvBatasSimpan.setText("Batas penyimpanan "+ String.valueOf(a) +" hari");
+        tvTercatat.setText("Tercatat "+String.valueOf(b)+" dari maks "+
+                String.valueOf(c)+" produk");
+        return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 
     @Override
     public void pindah() {
@@ -153,82 +224,6 @@ public class CartFragment extends Fragment implements CartContract.View, PindahD
 
         }
     };
-
-    public CartFragment() {
-    }
-
-    public static CartFragment newInstance(){
-        return new CartFragment();
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_cart, container, false);
-        unbinder = ButterKnife.bind(this,root);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext()) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        adapter = new ExpandCartAdapter(mPresenter.getRealmResultDetailPackage(), getContext(),cartEvent, productEvent);
-
-        adapter.setExpandCollapseListener(new RealmExpandableRecyclerAdapter.ExpandCollapseListener() {
-            @Override
-            public void onParentExpanded(int parentPosition) {
-
-            }
-
-            @Override
-            public void onParentCollapsed(int parentPosition) {
-
-            }
-        });
-        rvCart.setItemAnimator(new DefaultItemAnimator());
-        rvCart.setLayoutManager(layoutManager);
-        rvCart.setAdapter(adapter);
-        btnSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    adapter.updateData(mPresenter.getRealmResultDetailPackage().sort("modified", Sort.DESCENDING));
-                }
-                else {
-                    adapter.updateData(mPresenter.getRealmResultDetailPackage());
-                }
-            }
-        });
-        int a = mPresenter.getTimeLimit();
-        int b = mPresenter.getReqCount();
-        int c = mPresenter.getReqLimit();
-        if(b>=c){
-            btnPaketBaru.setVisibility(GONE);
-        }
-        progressBar.setProgress(b);
-        progressBar.setMax(c);
-        tvBatasSimpan.setText("Batas penyimpanan "+ String.valueOf(a) +" hari");
-        tvTercatat.setText("Tercatat "+String.valueOf(b)+" dari maks "+
-                String.valueOf(c)+" produk");
-        return root;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    public void onDestroyView(){
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 
     @Override
     public void setPresenter(CartContract.Presenter presenter) {

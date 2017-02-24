@@ -69,7 +69,7 @@ public class NetworkModule {
                 .addConverterFactory(GsonConverterFactory.create(gsonString))
                 .addConverterFactory(GsonConverterFactory.create(gsonInt))
                 .baseUrl(ApiService.BASE_URL)
-                .client(client) //TODO: Delete when release
+                //.client(client) //TODO: Delete when release
                 .build();
 
         return retrofit.create(ApiService.class);

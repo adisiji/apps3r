@@ -43,7 +43,7 @@ android {
 
 
 ext {
-    supportLibraryVersion = '25.1.1'
+    supportLibraryVersion = '25.2.0'
     playServicesVersion = '10.0.1'
     butterVersion = '8.5.1'
     guavaVersion = '20.0'

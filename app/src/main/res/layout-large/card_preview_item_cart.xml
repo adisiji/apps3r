@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="8dp">
+
+        <View
+            android:id="@+id/border_item"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/dot_line"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/tv_title_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/border_item"
+            android:text="Nama Item"/>
+
+        <TextView
+            android:id="@+id/tv_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/border_item"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:text="XXXL"/>
+
+        <TextView
+            android:id="@+id/tv_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Color Item"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/tv_size"
+            android:textColor="@color/blue_link" />
+
+        <TextView
+            android:id="@+id/tv_card_harga_preview_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_color"
+            android:layout_marginTop="8dp"
+            android:text="Rp66.000"/>
+
+        <TextView
+            android:id="@+id/tv_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignBaseline="@id/tv_card_harga_preview_item"
+            android:text="x1"/>
+
+        <ImageView
+            android:id="@+id/iv_check_item"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_check_box_grey_500_24dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_color" />
+
+        <ImageView
+            android:id="@+id/iv_clock_item"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_watch_later_amber_500_24dp"
+            android:layout_toLeftOf="@id/iv_check_item"
+            android:layout_toStartOf="@id/iv_check_item"
+            android:layout_below="@id/tv_color"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_item_btm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/orange_move">
+
+        <TextView
+            android:id="@+id/title_pindah_keranjang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="5dp"
+            android:text="Pindahkan produk ke keranjang"/>
+
+        <TextView
+            android:id="@+id/title_pindah_keranjang2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_pindah_keranjang"
+            android:text="setalah"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="5dp"/>
+
+        <EditText
+            android:id="@+id/et_pindahari"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/title_pindah_keranjang"
+            android:layout_toRightOf="@id/title_pindah_keranjang2"
+            android:background="@drawable/white_box"
+            android:padding="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hari"
+            android:layout_below="@id/title_pindah_keranjang"
+            android:layout_toRightOf="@id/et_pindahari"
+            android:layout_marginLeft="8dp"
+            android:layout_alignBaseline="@id/title_pindah_keranjang2"/>
+
+        <TextView
+            android:id="@+id/title_pindah_paket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="12dp"
+            android:layout_below="@id/title_pindah_keranjang2"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:text="@string/text_move_package_product"/>
+
+    </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
