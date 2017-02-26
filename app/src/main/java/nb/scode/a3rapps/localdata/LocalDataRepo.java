@@ -2,6 +2,7 @@ package nb.scode.a3rapps.localdata;
 
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -36,8 +37,6 @@ import nb.scode.a3rapps.util.NetworkManager;
 
 public class LocalDataRepo implements LocalDataTask {
 
-    private MetaRealm metaRealm;
-
     private ApiService apiService;
     private Gson gson;
     private Realm realm;
@@ -55,73 +54,89 @@ public class LocalDataRepo implements LocalDataTask {
 
     @Override
     public boolean getMeta() {
-        metaRealm = realm.where(MetaRealm.class).findFirst();
-        //setDummy();
-        return metaRealm != null;
+        return realm.where(MetaRealm.class).findFirst() != null;
     }
 
     @Override
     public void setMeta(int uid, String key, String nama, int saldo,
-                        String prodTersimpan, int prodTersimpanMaks, LoadTaskCallback callback) {
-        MetaRealm metaRealm = new MetaRealm();
+                        String prodTersimpan, int prodTersimpanMaks,
+                        final LoadTaskCallback callback) {
+        final MetaRealm metaRealm = new MetaRealm();
         metaRealm.setId(uid);
         metaRealm.setKey(key);
         metaRealm.setNama(nama);
         metaRealm.setSaldo(saldo);
         metaRealm.setProdukTersimpan(prodTersimpan);
         metaRealm.setProdukTersimpanMaks(prodTersimpanMaks);
-        realm.beginTransaction();
-        realm.insertOrUpdate(metaRealm);
-        realm.commitTransaction();
-        this.metaRealm = metaRealm;
-        callback.success();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(metaRealm);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                callback.success();
+            }
+        });
     }
 
     @Override
     public String getName() {
-        return metaRealm.getNama();
+        try {
+            MetaRealm metaRealm = realm.where(MetaRealm.class).findFirst();
+            return metaRealm.getNama();
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+            return "Error";
+        }
     }
 
     @Override
     public int getSaldo() {
-        return metaRealm.getSaldo();
+        try {
+            MetaRealm metaRealm = realm.where(MetaRealm.class).findFirst();
+            return metaRealm.getSaldo();
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
     public int getTimeLimit() {
-        realm.beginTransaction();
-        SubMainPackage packet = realm.where(SubMainPackage.class).findFirst();
-        realm.commitTransaction();
-        if(packet!=null){
+        try{
+            SubMainPackage packet = realm.where(SubMainPackage.class).findFirst();
             return packet.getTime_limit();
         }
-        else {
+        catch (NullPointerException e){
+            Crashlytics.getInstance().core.log("Time Limit is empty");
             return 0;
         }
     }
 
     @Override
     public int getReqLimit() {
-        realm.beginTransaction();
-        SubMainPackage packet = realm.where(SubMainPackage.class).findFirst();
-        realm.commitTransaction();
-        if(packet!=null){
+        try {
+            SubMainPackage packet = realm.where(SubMainPackage.class).findFirst();
             return packet.getRequest_limit();
         }
-        else {
+        catch (NullPointerException e){
+            e.printStackTrace();
             return 0;
         }
     }
 
     @Override
     public int getReqCount() {
-        realm.beginTransaction();
-        SubMainPackage packet = realm.where(SubMainPackage.class).findFirst();
-        realm.commitTransaction();
-        if(packet!=null){
+        try {
+            SubMainPackage packet = realm.where(SubMainPackage.class).findFirst();
             return packet.getRequest_count();
         }
-        else {
+        catch (NullPointerException e){
+            e.printStackTrace();
             return 0;
         }
     }
@@ -133,22 +148,24 @@ public class LocalDataRepo implements LocalDataTask {
 
     @Override
     public long getLocalStampJne() {
-        LastUpdateLocal local = realm.where(LastUpdateLocal.class).findFirst();
-        if(local != null){
+        try {
+            LastUpdateLocal local = realm.where(LastUpdateLocal.class).findFirst();
             return local.getLastDataJne();
         }
-        else {
+        catch (NullPointerException e){
+            e.printStackTrace();
             return 0;
         }
     }
 
     @Override
     public long getLocalStampStatis() {
-        LastUpdateLocal local = realm.where(LastUpdateLocal.class).findFirst();
-        if(local != null){
+        try {
+            LastUpdateLocal local = realm.where(LastUpdateLocal.class).findFirst();
             return local.getLastDataStatis();
         }
-        else {
+        catch (NullPointerException e){
+            e.printStackTrace();
             return 0;
         }
     }
@@ -158,10 +175,33 @@ public class LocalDataRepo implements LocalDataTask {
 
     }
 
+    private int getUid(){
+        try {
+            MetaRealm metaRealm = realm.where(MetaRealm.class).findFirst();
+            return metaRealm.getId();
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    private String getKey(){
+        realm.beginTransaction();
+        MetaRealm metaRealm = realm.where(MetaRealm.class).findFirst();
+        realm.commitTransaction();
+        try {
+            return metaRealm.getKey();
+        }
+        catch (NullPointerException e){
+            return "Empty";
+        }
+    }
+
     @Override
     public void getDataStatis(final LoadTaskCallback callback) {
         if(networkManager.isConnected()){
-            apiService.ambilDataStatis(metaRealm.getId(),metaRealm.getKey())
+            apiService.ambilDataStatis(getUid(),getKey())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new ResourceObserver<DataStatis>() {
@@ -210,7 +250,7 @@ public class LocalDataRepo implements LocalDataTask {
     @Override
     public void getDataJne(final LoadTaskCallback callback) {
         if(networkManager.isConnected()){
-            apiService.ambilDataJne(metaRealm.getId(),metaRealm.getKey())
+            apiService.ambilDataJne(getUid(),getKey())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new ResourceObserver<DataJne>() {
@@ -252,7 +292,7 @@ public class LocalDataRepo implements LocalDataTask {
     @Override
     public void getDaftarPaket(final LoadTaskCallback callback) {
         if(networkManager.isConnected()){
-            apiService.ambilDaftarPaket(metaRealm.getId(),metaRealm.getKey())
+            apiService.ambilDaftarPaket(getUid(),getKey())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new ResourceObserver<MainPackages>() {
@@ -334,52 +374,76 @@ public class LocalDataRepo implements LocalDataTask {
 
     @Override
     public void getStamp(final UpdateCacheCallback callback) {
-        Log.d(TAG,"uid : "+String.valueOf(metaRealm.getId())
-                +" key : "+String.valueOf(metaRealm.getKey()));
+        Log.d(TAG,"uid : "+String.valueOf(getUid())
+                +" key : "+String.valueOf(getKey()));
         if(networkManager.isConnected()){
-            apiService.ambilMeta(metaRealm.getId(),metaRealm.getKey())
+            apiService.ambilMeta(getUid(),getKey())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new ResourceObserver<StampsRetro>() {
                         @Override
                         public void onNext(StampsRetro value) {
                             if(value.getStatus()>0){
-                                Stamps stampx = value.getStamps();
+                                final Stamps stampx = value.getStamps();
                                 if(stampx!=null){
                                     if(getLocalStampStatis() == 0 && getLocalStampJne() ==0){
-                                        realm.beginTransaction();
-                                        LastUpdateLocal local = new LastUpdateLocal();
-                                        local.setLastDataJne(stampx.getAmbilDataJne());
-                                        local.setLastDataStatis(stampx.getAmbilDataStatis());
-                                        realm.insertOrUpdate(local);
-                                        realm.commitTransaction();
+                                        realm.executeTransactionAsync(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm) {
+                                                LastUpdateLocal local = new LastUpdateLocal();
+                                                local.setLastDataJne(stampx.getAmbilDataJne());
+                                                local.setLastDataStatis(stampx.getAmbilDataStatis());
+                                                realm.copyToRealm(local);
+                                            }
+                                        });
                                     }
                                     else if(getLocalStampStatis() < stampx.getAmbilDataStatis() &&
                                             getLocalStampJne() < stampx.getAmbilDataJne()){
                                         clearStamps();
-                                        realm.beginTransaction();
-                                        LastUpdateLocal local = new LastUpdateLocal();
-                                        local.setLastDataJne(stampx.getAmbilDataJne());
-                                        local.setLastDataStatis(stampx.getAmbilDataStatis());
-                                        realm.insertOrUpdate(local);
-                                        realm.commitTransaction();
-                                        callback.updateJneStatis();
+                                        realm.executeTransactionAsync(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm) {
+                                                LastUpdateLocal local = new LastUpdateLocal();
+                                                local.setLastDataJne(stampx.getAmbilDataJne());
+                                                local.setLastDataStatis(stampx.getAmbilDataStatis());
+                                                realm.insertOrUpdate(local);
+                                            }
+                                        }, new Realm.Transaction.OnSuccess() {
+                                            @Override
+                                            public void onSuccess() {
+                                                callback.updateJneStatis();
+                                            }
+                                        });
                                     }
                                     else if(getLocalStampStatis() < stampx.getAmbilDataStatis()){
-                                        realm.beginTransaction();
-                                        LastUpdateLocal stamps = realm.where(LastUpdateLocal.class)
-                                                .equalTo("lastDataStatis",getLocalStampStatis()).findFirst();
-                                        stamps.setLastDataStatis(stampx.getAmbilDataStatis());
-                                        realm.commitTransaction();
-                                        callback.updateStatis();
+                                        realm.executeTransactionAsync(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm) {
+                                                LastUpdateLocal stamps = realm.where(LastUpdateLocal.class)
+                                                        .equalTo("lastDataStatis", getLocalStampStatis()).findFirst();
+                                                stamps.setLastDataStatis(stampx.getAmbilDataStatis());
+                                            }
+                                        }, new Realm.Transaction.OnSuccess() {
+                                            @Override
+                                            public void onSuccess() {
+                                                callback.updateStatis();
+                                            }
+                                        });
                                     }
                                     else if(getLocalStampJne() < stampx.getAmbilDataJne()){
-                                        realm.beginTransaction();
-                                        LastUpdateLocal stamps = realm.where(LastUpdateLocal.class)
-                                                .equalTo("lastDataJne",getLocalStampJne()).findFirst();
-                                        stamps.setLastDataJne(stampx.getAmbilDataJne());
-                                        realm.commitTransaction();
-                                        callback.updateJne();
+                                        realm.executeTransactionAsync(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm) {
+                                                LastUpdateLocal stamps = realm.where(LastUpdateLocal.class)
+                                                        .equalTo("lastDataJne", getLocalStampJne()).findFirst();
+                                                stamps.setLastDataJne(stampx.getAmbilDataJne());
+                                            }
+                                        }, new Realm.Transaction.OnSuccess() {
+                                            @Override
+                                            public void onSuccess() {
+                                                callback.updateJne();
+                                            }
+                                        });
                                     }
                                     else {
                                         Log.d(TAG, "Stamps is uptodate");
@@ -421,92 +485,71 @@ public class LocalDataRepo implements LocalDataTask {
 
     @Override
     public void clearMeta() {
-        try {
-            realm.beginTransaction();
-            realm.delete(MetaRealm.class);
-            realm.commitTransaction();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.delete(MetaRealm.class);
+            }
+        });
     }
 
     @Override
     public void clearStamps() {
-        if(!isEmptyLocalStamp()){
-            try {
-                realm.beginTransaction();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
                 realm.delete(Stamps.class);
-                realm.commitTransaction();
             }
-            catch (IllegalStateException e){
-                e.printStackTrace();
-            }
-        }
+        });
     }
 
     @Override
     public RealmResults<DetailPackage> getRealmResultDetailPackage() {
-        realm.beginTransaction();
         RealmResults<DetailPackage> realmResults = realm.where(DetailPackage.class).findAll();
-        realm.commitTransaction();
         return realmResults;
     }
 
     @Override
     public RealmResults<Products> getRealmResultProducts(String id) {
-        realm.beginTransaction();
         DetailPackage detailPackage = realm.where(DetailPackage.class).contains("packaged",id).findFirst();
         RealmResults<Products> realmResults = detailPackage.getProducts().where().findAll();
-        realm.commitTransaction();
         Log.d(TAG,String.valueOf(realmResults.size()));
         return realmResults;
     }
 
     @Override
     public List<Colors> getListColors() {
-        realm.beginTransaction();
         RealmResults<Colors> colorsList = realm.where(Colors.class).findAll();
-        realm.commitTransaction();
         return colorsList;
     }
 
     @Override
     public List<Sizes> getListSizes() {
-        realm.beginTransaction();
         RealmResults<Sizes> sizesList = realm.where(Sizes.class).findAll();
-        realm.commitTransaction();
         return sizesList;
     }
 
     @Override
     public Products getProducts(String id) {
-        realm.beginTransaction();
         Products products = realm.where(Products.class).contains("id",id).findFirst();
-        realm.commitTransaction();
         return products;
     }
 
     @Override
     public String getProductName(String id) {
-        realm.beginTransaction();
         SubMainTypes types = realm.where(SubMainTypes.class).contains("type",id).findFirst();
-        realm.commitTransaction();
         return types.getReadable();
     }
 
     @Override
     public String getProductSize(String id) {
-        realm.beginTransaction();
         Sizes sizes = realm.where(Sizes.class).contains("size",id).findFirst();
-        realm.commitTransaction();
         return sizes.getName();
     }
 
     @Override
     public String getProductColor(String id) {
-        realm.beginTransaction();
         Colors colors = realm.where(Colors.class).contains("code",id).findFirst();
-        realm.commitTransaction();
         return colors.getName();
     }
 
@@ -544,9 +587,7 @@ public class LocalDataRepo implements LocalDataTask {
 
     @Override
     public DetailPackage getDetailPackage(String id) {
-        realm.beginTransaction();
         DetailPackage products = realm.where(DetailPackage.class).contains("packaged",id).findFirst();
-        realm.commitTransaction();
         return products;
     }
 }
