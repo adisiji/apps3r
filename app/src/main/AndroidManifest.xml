@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".home.HomeActivity"
+            android:name=".ui.home.HomeActivity"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,14 +23,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".ui.login.LoginActivity"
             android:launchMode="singleInstance" />
-        <activity android:name=".cart.CartActivity" />
+        <activity android:name=".ui.cart.CartActivity" />
         <activity
-            android:name=".WebViewActivity"
+            android:name=".ui.WebViewActivity"
             android:label="@string/title_activity_web_view"
             android:theme="@style/AppTheme" />
-        <activity android:name=".catat.CatatActivity"></activity>
+        <activity android:name=".ui.catat.CatatActivity"></activity>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3dc92bea8ba889248d66cca64e20a50e8b8e81d5" />

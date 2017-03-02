@@ -10,8 +10,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.adapter.RealmAdapter.RealmRecyclerViewAdapater;
-import nb.scode.a3rapps.dialogs.PindahDialogFragment;
 import nb.scode.a3rapps.modelretro.Products;
+import nb.scode.a3rapps.ui.dialogs.PindahDialogFragment;
 
 /**
  * Created by neobyte on 2/23/2017.
