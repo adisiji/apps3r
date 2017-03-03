@@ -3,8 +3,6 @@ package nb.scode.a3rapps.ui.catat;
 import java.util.List;
 
 import io.realm.RealmResults;
-import nb.scode.a3rapps.BasePresenter;
-import nb.scode.a3rapps.BaseView;
 import nb.scode.a3rapps.modelretro.Colors;
 import nb.scode.a3rapps.modelretro.DetailPackage;
 import nb.scode.a3rapps.modelretro.Products;
@@ -16,7 +14,7 @@ import nb.scode.a3rapps.modelretro.Sizes;
 
 public interface CatatContract {
 
-    interface Presenter extends BasePresenter {
+    interface Presenter {
 
         List<Colors> getColorList();
 
@@ -32,7 +30,9 @@ public interface CatatContract {
 
     }
 
-    interface View extends BaseView<Presenter> {
+    interface View {
+
+        void setPresenter(Presenter presenter);
 
         String getCatatan(String id);
 

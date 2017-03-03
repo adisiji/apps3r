@@ -24,8 +24,8 @@ android {
         renderscriptSupportModeEnabled true
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 3
-        versionName "Mock 3"
+        versionCode 4
+        versionName "Mock 4 - Rev UI"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -128,6 +128,9 @@ dependencies {
 
     //Blur Dialog Fragment
     compile 'fr.tvbarthel.blurdialogfragment:lib:2.2.0'
+
+    //MVP loader helper
+    compile "biz.laenger.android:together:1.0.0"
 
     testCompile 'junit:junit:4.12'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta5'

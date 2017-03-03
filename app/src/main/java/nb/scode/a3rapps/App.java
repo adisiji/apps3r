@@ -9,6 +9,8 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import nb.scode.a3rapps.di.AppComponent;
 import nb.scode.a3rapps.di.DaggerAppComponent;
+import nb.scode.a3rapps.di.DaggerPagerComponent;
+import nb.scode.a3rapps.di.PagerComponent;
 import nb.scode.a3rapps.di.modules.DataModule;
 import nb.scode.a3rapps.di.modules.NetworkModule;
 import nb.scode.a3rapps.localdata.DaggerLocalDataComponent;
@@ -22,23 +24,29 @@ import nb.scode.a3rapps.localdata.LocalDataModule;
 public class App extends MultiDexApplication {
 
     private static LocalDataComponent dataComponent;
+    private static PagerComponent sPagerComponent;
+    private static AppComponent sAppComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
-        initInjector();
         initRealm();
+        initInjector();
     }
 
     private void initInjector(){
-        AppComponent appComponent = DaggerAppComponent.builder()
+        sAppComponent = DaggerAppComponent.builder()
                 .dataModule(new DataModule(this))
                 .networkModule(new NetworkModule(this))
                 .build();
         dataComponent = DaggerLocalDataComponent.builder()
                 .localDataModule(new LocalDataModule())
-                .appComponent(appComponent).build();
+                .appComponent(sAppComponent).build();
+        sPagerComponent = DaggerPagerComponent.builder()
+                .pagerModule(new PagerModule(dataComponent.getLocalRepo()))
+                .localDataComponent(dataComponent)
+                .build();
     }
 
     private void initRealm(){
@@ -53,6 +61,14 @@ public class App extends MultiDexApplication {
 
     public static LocalDataComponent getDataComponent(){
         return dataComponent;
+    }
+
+    public static PagerComponent getPagerComponent(){
+        return sPagerComponent;
+    }
+
+    public static AppComponent getAppComponent(){
+        return sAppComponent;
     }
 
 }

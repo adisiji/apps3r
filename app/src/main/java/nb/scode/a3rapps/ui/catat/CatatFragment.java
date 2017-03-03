@@ -36,10 +36,12 @@ public class CatatFragment extends Fragment implements CatatContract.View {
     @BindView(R.id.et_catatan)
     TextInputEditText etCatatan;
 
+
     @Override
     public void setPresenter(CatatContract.Presenter presenter) {
         this.presenter = checkNotNull(presenter,"Presenter cannot be null");
     }
+
 
     public CatatFragment(){
 

@@ -1,8 +1,6 @@
-package nb.scode.a3rapps.ui.cart;
+package nb.scode.a3rapps.ui.pager.cart;
 
 import io.realm.RealmResults;
-import nb.scode.a3rapps.BasePresenter;
-import nb.scode.a3rapps.BaseView;
 import nb.scode.a3rapps.modelretro.DetailPackage;
 import nb.scode.a3rapps.modelretro.Products;
 
@@ -12,7 +10,7 @@ import nb.scode.a3rapps.modelretro.Products;
 
 public interface CartContract {
 
-    interface Presenter extends BasePresenter {
+    interface Presenter {
 
         RealmResults<DetailPackage> getRealmResultDetailPackage();
 
@@ -40,7 +38,9 @@ public interface CartContract {
 
     }
 
-    interface View extends BaseView<Presenter>{
+    interface View {
+
+        void setView();
 
     }
 

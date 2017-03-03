@@ -1,32 +1,43 @@
-package nb.scode.a3rapps.ui.cart;
+package nb.scode.a3rapps.ui.pager.cart;
 
 import javax.inject.Inject;
 
+import biz.laenger.android.together.BasePresenter;
 import io.realm.RealmResults;
-import nb.scode.a3rapps.localdata.LocalDataRepo;
 import nb.scode.a3rapps.localdata.LocalDataTask;
 import nb.scode.a3rapps.modelretro.DetailPackage;
 import nb.scode.a3rapps.modelretro.Products;
+import nb.scode.a3rapps.ui.pager.LoadFirst;
 
 /**
  * Created by neobyte on 2/11/2017.
  */
 
-public class CartPresenter implements CartContract.Presenter {
+@CartScope
+public class CartPresenter extends BasePresenter<CartContract.View,CartComponent> implements CartContract.Presenter {
 
-    private final CartContract.View mView;
-    private final LocalDataTask dataRepo;
+    private final String TAG = CartPresenter.class.getSimpleName();
 
     @Inject
-    public CartPresenter(CartContract.View view, LocalDataRepo localDataRepo){
-        mView = view;
-        mView.setPresenter(this);
-        dataRepo = localDataRepo;
+    LoadFirst mLoadFirst;
+
+    @Inject
+    LocalDataTask dataRepo;
+
+    @Inject
+    public CartPresenter(){
+
     }
 
     @Override
-    public void start() {
-
+    public void bindView(CartContract.View view) {
+        super.bindView(view);
+        if(mLoadFirst.isLoaded()){
+            getView().setView();
+        }
+        else {
+            mLoadFirst.setLoaded(true);
+        }
     }
 
     @Override

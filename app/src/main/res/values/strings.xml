@@ -3,6 +3,11 @@
     <string name="subs_cart_home">Harga turun bertahap, beli/dropship 1 potong oke, pengiriman dengan JNE.</string>
     <string name="subs_gudang_home">Harga termurah, pembelian minimum 200 potong, kirim dengan ekspidisi pilihan Anda</string>
 
+    <string name="title_home">Home</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_more">More</string>
+
     <string name="error_no_conection">No Internet Connection</string>
     <string name="title_activity_web_view">WebViewActivity</string>
 

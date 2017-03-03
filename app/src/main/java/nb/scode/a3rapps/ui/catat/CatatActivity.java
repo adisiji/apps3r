@@ -3,25 +3,17 @@ package nb.scode.a3rapps.ui.catat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.shehabic.droppy.DroppyClickCallbackInterface;
-import com.shehabic.droppy.DroppyMenuItem;
 import com.shehabic.droppy.DroppyMenuPopup;
-import com.shehabic.droppy.animations.DroppyFadeInAnimation;
 
 import javax.inject.Inject;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import nb.scode.a3rapps.App;
 import nb.scode.a3rapps.R;
-import nb.scode.a3rapps.ui.WebViewActivity;
-import nb.scode.a3rapps.ui.home.HomeActivity;
 import nb.scode.a3rapps.util.ActivityUtils;
 
 public class CatatActivity extends AppCompatActivity {
@@ -66,12 +58,13 @@ public class CatatActivity extends AppCompatActivity {
         DaggerCatatComponent.builder().localDataComponent(App.getDataComponent())
                 .catatPresenterModule(new CatatPresenterModule(catatFragment))
                 .build().inject(this);
-        setMenu();
+
     }
 
+    /*
     private void setMenu(){
         DroppyMenuPopup.Builder droppyBuilder = new DroppyMenuPopup.Builder(CatatActivity.this, anchorMenu);
-        droppyMenu = droppyBuilder.addMenuItem(new DroppyMenuItem("Home")) //0
+        droppyMenu = droppyBuilder.addMenuItem(new DroppyMenuItem("HomeScope")) //0
                 .addSeparator()
                 .addMenuItem(new DroppyMenuItem("Ready   Pre Order")) //1
                 .addSeparator()
@@ -154,4 +147,5 @@ public class CatatActivity extends AppCompatActivity {
     void showMenu(){
         droppyMenu.show();
     }
+    */
 }

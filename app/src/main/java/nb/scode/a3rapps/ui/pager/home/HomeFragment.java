@@ -1,16 +1,15 @@
-package nb.scode.a3rapps.ui.home;
+package nb.scode.a3rapps.ui.pager.home;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,18 +24,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import nb.scode.a3rapps.App;
+import nb.scode.a3rapps.BasePagerFragment;
 import nb.scode.a3rapps.R;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by neobyte on 2/8/2017.
  */
 
-public class HomeFragment extends Fragment implements HomeContract.View {
+public class HomeFragment extends BasePagerFragment<HomeContract.View, HomePresenter, HomeComponent> implements HomeContract.View {
 
     private Unbinder unbinder;
-    private HomeContract.Presenter mPresenter;
     private Callback callback;
     private Snackbar snackbar;
 
@@ -47,7 +45,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @BindView(R.id.iv_logo_home)
     ImageView mImageViewLogo;
     @BindView(R.id.iv_bg_home)
-    ImageView mImageViewBg;
+    FrameLayout mImageViewBg;
     @BindView(R.id.iv_cart_home)
     ImageView mImageViewCart;
     @BindView(R.id.iv_gudang_home)
@@ -57,15 +55,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
     public HomeFragment(){
 
-    }
-
-    public static HomeFragment newInstance(){
-        return new HomeFragment();
-    }
-
-    @Override
-    public void setPresenter(@NonNull HomeContract.Presenter presenter){
-        mPresenter = checkNotNull(presenter,"Presenter cannot be null");
     }
 
     @Override
@@ -81,9 +70,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this,root);
-        if(savedInstanceState==null){
-            mPresenter.start();
-        }
         loadImage();
         return root;
     }
@@ -91,7 +77,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void onResume(){
         super.onResume();
-
     }
 
     @Override
@@ -101,7 +86,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     private void loadImage(){
-
         mImageViewBg.setBackground(imgBg);
         Glide.with(getContext())
                 .load(R.drawable.logo3r2)
@@ -121,8 +105,8 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void showLoading(){
-
+    public void finishGetData(){
+        callback.finishGetData();
     }
 
     @Override
@@ -143,6 +127,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         snackbar = Snackbar
                 .make(mRelativeLayout, message, Snackbar.LENGTH_SHORT);
         snackbar.show();
+
     }
 
     @Override
@@ -153,8 +138,8 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         if(dialog.findViewById(R.id.btn_ok_dialog) == view){
-                            mPresenter.getDataStatis();
-                            mPresenter.getDataJne();
+                            getPresenter().getDataStatis();
+                            getPresenter().getDataJne();
                             dialog.dismiss();
                         }
                         else {
@@ -178,7 +163,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         if(dialog.findViewById(R.id.btn_ok_dialog) == view){
-                            mPresenter.getDataStatis();
+                            getPresenter().getDataStatis();
                             dialog.dismiss();
                         }
                         else {
@@ -202,7 +187,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         if(dialog.findViewById(R.id.btn_ok_dialog) == view){
-                            mPresenter.getDataJne();
+                            getPresenter().getDataJne();
                             dialog.dismiss();
                         }
                         else {
@@ -226,7 +211,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         if(dialog.findViewById(R.id.btn_ok_dialog) == view){
-                            mPresenter.getFirstData();
+                            getPresenter().getFirstData();
                             dialog.dismiss();
                         }
                         else {
@@ -258,10 +243,26 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         callback.login();
     }
 
+    @Override
+    public Class<? extends HomePresenter> getTypeClazz() {
+        return HomePresenter.class;
+    }
+
+    @Override
+    protected HomeComponent createComponent() {
+        return App.getPagerComponent().mHomeComponent(new HomeModule());
+    }
+
+    @Override
+    public void onPresenterProvided(HomePresenter presenter) {
+        super.onPresenterProvided(presenter);
+    }
+
     public interface Callback{
         void login();
         void cart();
         void gudang();
+        void finishGetData();
     }
 
 }

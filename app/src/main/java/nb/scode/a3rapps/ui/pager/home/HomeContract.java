@@ -1,7 +1,4 @@
-package nb.scode.a3rapps.ui.home;
-
-import nb.scode.a3rapps.BasePresenter;
-import nb.scode.a3rapps.BaseView;
+package nb.scode.a3rapps.ui.pager.home;
 
 /**
  * Created by neobyte on 2/8/2017.
@@ -9,7 +6,9 @@ import nb.scode.a3rapps.BaseView;
 
 public interface HomeContract {
 
-    interface Presenter extends BasePresenter {
+    interface Presenter {
+
+        void start();
 
         void getFirstData();
 
@@ -21,11 +20,11 @@ public interface HomeContract {
 
     }
 
-    interface View extends BaseView<Presenter> {
+    interface View {
 
         String URL_GUDANG = "http://tigaer.id/gudang";
 
-        void showLoading();
+        void finishGetData();
 
         void showFirstUpdate(String message);
 

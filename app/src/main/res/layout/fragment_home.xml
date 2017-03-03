@@ -11,29 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="250dp">
 
-        <ImageView
+        <FrameLayout
             android:id="@+id/iv_bg_home"
             android:layout_width="match_parent"
             android:layout_height="250dp" />
 
-        <View
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="185dp" />
+            android:layout_height="150dp"
+            android:id="@+id/iv_logo_home"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
+            android:layout_gravity="center_horizontal"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:id="@+id/iv_logo_home"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center_horizontal"/>
-
-        </LinearLayout>
     </FrameLayout>
 
     <LinearLayout
@@ -61,13 +51,13 @@
                 android:orientation="horizontal"
                 android:paddingRight="8dp"
                 android:paddingLeft="8dp"
-                android:weightSum="4">
+                android:weightSum="20">
 
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:id="@+id/iv_cart_home"
-                    android:layout_weight="1.2"/>
+                    android:layout_weight="6"/>
 
                 <TextView
                     android:text="@string/subs_cart_home"
@@ -77,7 +67,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat"
                     android:textSize="14sp"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="10"/>
 
             </LinearLayout>
 
@@ -97,12 +87,12 @@
                 android:layout_height="match_parent"
                 android:paddingRight="8dp"
                 android:paddingLeft="8dp"
-                android:weightSum="4">
+                android:weightSum="20">
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.8"/>
+                    android:layout_height="0dp"
+                    android:layout_weight="4"/>
 
                 <TextView
                     android:text="@string/subs_gudang_home"
@@ -112,14 +102,14 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="2dp"
                     android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:layout_weight="2"
+                    android:layout_weight="10"
                     android:gravity="end"/>
 
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:id="@+id/iv_gudang_home"
-                    android:layout_weight="1.2" />
+                    android:layout_weight="6" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>

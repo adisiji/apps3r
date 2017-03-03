@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import nb.scode.a3rapps.App;
 import nb.scode.a3rapps.R;
-import nb.scode.a3rapps.ui.home.HomeActivity;
+import nb.scode.a3rapps.ui.MainHomeActivity;
 import nb.scode.a3rapps.util.ActivityUtils;
 import nb.scode.a3rapps.util.CustomJsInterface;
 
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Ca
 
     @Override
     public void goHome() {
-        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+        Intent i = new Intent(getApplicationContext(), MainHomeActivity.class);
         startActivity(i);
         finish();
     }

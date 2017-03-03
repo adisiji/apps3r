@@ -29,11 +29,6 @@ public class CatatPresenter implements CatatContract.Presenter {
     }
 
     @Override
-    public void start() {
-
-    }
-
-    @Override
     public List<Sizes> getSizesList() {
         return dataRepo.getListSizes();
     }

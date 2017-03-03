@@ -1,9 +1,8 @@
-package nb.scode.a3rapps.ui.cart;
+package nb.scode.a3rapps.ui.pager.cart;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -22,28 +21,31 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.realm.RealmExpandableRecyclerAdapter;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import mehdi.sakout.fancybuttons.FancyButton;
+import nb.scode.a3rapps.App;
+import nb.scode.a3rapps.BasePagerFragment;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.adapter.ExpandCartAdapter;
 import nb.scode.a3rapps.modelretro.DetailPackage;
 import nb.scode.a3rapps.modelretro.Products;
+import nb.scode.a3rapps.ui.MainHomeActivity;
 import nb.scode.a3rapps.ui.catat.CatatActivity;
 import nb.scode.a3rapps.ui.dialogs.PindahDialogFragment;
 
 import static android.view.View.GONE;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by neobyte on 2/11/2017.
  */
 
-public class CartFragment extends Fragment implements CartContract.View, PindahDialogFragment.DialogCallback {
+public class CartFragment extends BasePagerFragment<CartContract.View, CartPresenter, CartComponent>
+        implements CartContract.View, PindahDialogFragment.DialogCallback, MainHomeActivity.CallbackCart {
+
+    private final String TAG = CartFragment.class.getSimpleName();
 
     private ExpandCartAdapter adapter;
-    private CartContract.Presenter mPresenter;
     private Unbinder unbinder;
     private String id;
 
@@ -60,11 +62,15 @@ public class CartFragment extends Fragment implements CartContract.View, PindahD
     @BindView(R.id.switch_urutkan)
     SwitchCompat btnSwitch;
 
-    public CartFragment() {
+    MainHomeActivity mHomeActivity;
+
+    @Override
+    public void finishGetData() {
+        setView();
     }
 
-    public static CartFragment newInstance(){
-        return new CartFragment();
+    public CartFragment() {
+
     }
 
     @Override
@@ -79,45 +85,15 @@ public class CartFragment extends Fragment implements CartContract.View, PindahD
         unbinder = ButterKnife.bind(this,root);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setAutoMeasureEnabled(true);
-        adapter = new ExpandCartAdapter(mPresenter.getRealmResultDetailPackage(), getContext(),cartEvent, productEvent);
-
-        adapter.setExpandCollapseListener(new RealmExpandableRecyclerAdapter.ExpandCollapseListener() {
-            @Override
-            public void onParentExpanded(int parentPosition) {
-                rvCart.invalidate();
-            }
-
-            @Override
-            public void onParentCollapsed(int parentPosition) {
-                rvCart.invalidate();
-            }
-        });
-
         rvCart.setLayoutManager(layoutManager);
-        rvCart.setAdapter(adapter);
-        btnSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    adapter.updateData(mPresenter.getRealmResultDetailPackage().sort("modified", Sort.DESCENDING));
-                }
-                else {
-                    adapter.updateData(mPresenter.getRealmResultDetailPackage());
-                }
-            }
-        });
-        int a = mPresenter.getTimeLimit();
-        int b = mPresenter.getReqCount();
-        int c = mPresenter.getReqLimit();
-        if(b>=c){
-            btnPaketBaru.setVisibility(GONE);
-        }
-        progressBar.setProgress(b);
-        progressBar.setMax(c);
-        tvBatasSimpan.setText("Batas penyimpanan "+ String.valueOf(a) +" hari");
-        tvTercatat.setText("Tercatat "+String.valueOf(b)+" dari maks "+
-                String.valueOf(c)+" produk");
         return root;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mHomeActivity = (MainHomeActivity)getActivity();
+        mHomeActivity.setCallbackCart(this);
     }
 
     @Override
@@ -133,13 +109,60 @@ public class CartFragment extends Fragment implements CartContract.View, PindahD
     }
 
     @Override
+    public void setView() {
+
+        adapter = new ExpandCartAdapter(getPresenter().getRealmResultDetailPackage(), getActivity() ,cartEvent, productEvent);
+
+        btnSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    adapter.updateData(getPresenter().getRealmResultDetailPackage().sort("modified", Sort.DESCENDING));
+                }
+                else {
+                    adapter.updateData(getPresenter().getRealmResultDetailPackage());
+                }
+            }
+        });
+        rvCart.setAdapter(adapter);
+        int a = getPresenter().getTimeLimit();
+        int b = getPresenter().getReqCount();
+        int c = getPresenter().getReqLimit();
+        if(b>=c){
+            btnPaketBaru.setVisibility(GONE);
+        }
+        progressBar.setProgress(b);
+        progressBar.setMax(c);
+        tvBatasSimpan.setText("Batas penyimpanan "+ String.valueOf(a) +" hari");
+        tvTercatat.setText("Tercatat "+String.valueOf(b)+" dari maks "+
+                String.valueOf(c)+" produk");
+    }
+
+    @Override
+    protected CartComponent createComponent() {
+
+        return App.getPagerComponent().mCartComponent(new CartModule());
+    }
+
+    @Override
+    public Class<? extends CartPresenter> getTypeClazz() {
+
+        return CartPresenter.class;
+    }
+
+    @Override
+    public void onPresenterProvided(CartPresenter presenter) {
+        super.onPresenterProvided(presenter);
+    }
+
+    @Override
     public void pindah() {
         Log.d("Pindah","GOGOGO");
     }
 
     @Override
     public RealmResults<Products> getProduct(String id) {
-        return mPresenter.getRealmResultsProduct(id);
+        return getPresenter().getRealmResultsProduct(id);
     }
 
     @Override
@@ -149,23 +172,23 @@ public class CartFragment extends Fragment implements CartContract.View, PindahD
 
     @Override
     public String colorProduct(String id) {
-        return mPresenter.getProductColor(id);
+        return getPresenter().getProductColor(id);
     }
 
     @Override
     public String sizeProduct(String id) {
-        return mPresenter.getProductSize(id);
+        return getPresenter().getProductSize(id);
     }
 
     @Override
     public String nameProduct(String id) {
-        return mPresenter.getProductName(id);
+        return getPresenter().getProductName(id);
     }
 
     @Override
     public List<String> listPenerima() {
         List<String> hasil = new ArrayList<>();
-        List<DetailPackage> detailPackageList = mPresenter.getRealmResultDetailPackage();
+        List<DetailPackage> detailPackageList = getPresenter().getRealmResultDetailPackage();
         for(DetailPackage detailPackage: detailPackageList){
             if(detailPackage.getKeranjang().equals("0")){
                 hasil.add(detailPackage.getRecipientDetailList().getName());
@@ -177,7 +200,7 @@ public class CartFragment extends Fragment implements CartContract.View, PindahD
     ExpandCartAdapter.ProductEvent productEvent = new ExpandCartAdapter.ProductEvent() {
         @Override
         public String nameProduct(String id) {
-            return mPresenter.getProductName(id);
+            return getPresenter().getProductName(id);
         }
 
         @Override
@@ -187,12 +210,12 @@ public class CartFragment extends Fragment implements CartContract.View, PindahD
 
         @Override
         public String colorProduct(String id) {
-            return mPresenter.getProductColor(id);
+            return getPresenter().getProductColor(id);
         }
 
         @Override
         public String sizeProduct(String id) {
-            return mPresenter.getProductSize(id);
+            return getPresenter().getProductSize(id);
         }
 
         @Override
@@ -211,12 +234,12 @@ public class CartFragment extends Fragment implements CartContract.View, PindahD
 
         @Override
         public int reqProduct(String id) {
-            return mPresenter.getAvailProduct(id);
+            return getPresenter().getAvailProduct(id);
         }
 
         @Override
         public int availProduct(String id) {
-            return mPresenter.getReqPrduct(id);
+            return getPresenter().getReqPrduct(id);
         }
 
         @Override
@@ -224,11 +247,6 @@ public class CartFragment extends Fragment implements CartContract.View, PindahD
 
         }
     };
-
-    @Override
-    public void setPresenter(CartContract.Presenter presenter) {
-        mPresenter = checkNotNull(presenter,"Presenter cannot be null");
-    }
 
     private void showDialog(String id){
         PindahDialogFragment pindahDialogFragment = PindahDialogFragment.newInstance(id,8,8f,true,true);

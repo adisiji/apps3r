@@ -300,6 +300,7 @@ public class LocalDataRepo implements LocalDataTask {
                         public void onNext(MainPackages value) {
                             if(value.getStatus()>0){
                                 if(clearDaftarPaket()){
+                                    Log.d(TAG, "getDaftarPaket: started");
                                     final List<DetailPackage> typesList = new ArrayList<>();
                                     for(Integer key: value.getPackageMap().keySet()){
                                         typesList.add(value.getPackageMap().get(key));
@@ -358,6 +359,7 @@ public class LocalDataRepo implements LocalDataTask {
                             i.deleteFromRealm();
                         }
                     }
+                    Log.i(TAG, "execute: cleardaftarpaket completed");
                 }
             });
             return true;
