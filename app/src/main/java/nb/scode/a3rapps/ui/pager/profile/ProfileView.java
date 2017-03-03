@@ -5,5 +5,5 @@ package nb.scode.a3rapps.ui.pager.profile;
  */
 
 public interface ProfileView {
-    String PROFILE_URL = "";
+
 }

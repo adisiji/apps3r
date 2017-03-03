@@ -1,6 +1,8 @@
 package nb.scode.a3rapps.ui.pager.home;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,11 +17,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
-import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,14 +47,12 @@ public class HomeFragment extends BasePagerFragment<HomeContract.View, HomePrese
     RelativeLayout mRelativeLayout;
     @BindView(R.id.iv_logo_home)
     ImageView mImageViewLogo;
-    @BindView(R.id.iv_bg_home)
-    FrameLayout mImageViewBg;
+    @BindView(R.id.frameLayout)
+    FrameLayout mFrameLayout;
     @BindView(R.id.iv_cart_home)
     ImageView mImageViewCart;
     @BindView(R.id.iv_gudang_home)
     ImageView mImageViewGudang;
-    @BindDrawable(R.drawable.img_bg_home)
-    Drawable imgBg;
 
     public HomeFragment(){
 
@@ -70,31 +71,46 @@ public class HomeFragment extends BasePagerFragment<HomeContract.View, HomePrese
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this,root);
-        loadImage();
         return root;
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        loadImage();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Log.i(TAG, "onDestroyView: HomeFragment");
+        callback = null;
         unbinder.unbind();
     }
 
     private void loadImage(){
-        mImageViewBg.setBackground(imgBg);
+        Glide.with(getContext())
+                .load(R.drawable.img_bg_home)
+                .asBitmap()
+                .centerCrop()
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+
+                        Drawable drawable = new BitmapDrawable(getResources(),resource);
+                        mFrameLayout.setBackground(drawable);
+                    }
+                });
         Glide.with(getContext())
                 .load(R.drawable.logo3r2)
                 .fitCenter()
                 .into(mImageViewLogo);
+
         Glide.with(getContext())
                 .load(R.drawable.tigargudang)
                 .centerCrop()
                 .into(mImageViewGudang);
+
         Glide.with(getContext())
                 .load(R.drawable.tigaronline)
                 .centerCrop()

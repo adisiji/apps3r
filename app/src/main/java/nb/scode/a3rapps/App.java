@@ -13,6 +13,7 @@ import nb.scode.a3rapps.di.DaggerPagerComponent;
 import nb.scode.a3rapps.di.PagerComponent;
 import nb.scode.a3rapps.di.modules.DataModule;
 import nb.scode.a3rapps.di.modules.NetworkModule;
+import nb.scode.a3rapps.di.modules.PagerModule;
 import nb.scode.a3rapps.localdata.DaggerLocalDataComponent;
 import nb.scode.a3rapps.localdata.LocalDataComponent;
 import nb.scode.a3rapps.localdata.LocalDataModule;

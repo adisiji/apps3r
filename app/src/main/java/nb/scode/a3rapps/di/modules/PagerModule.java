@@ -1,4 +1,4 @@
-package nb.scode.a3rapps;
+package nb.scode.a3rapps.di.modules;
 
 import dagger.Module;
 import dagger.Provides;

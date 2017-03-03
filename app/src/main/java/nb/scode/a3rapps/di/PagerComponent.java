@@ -1,7 +1,7 @@
 package nb.scode.a3rapps.di;
 
 import dagger.Component;
-import nb.scode.a3rapps.PagerModule;
+import nb.scode.a3rapps.di.modules.PagerModule;
 import nb.scode.a3rapps.di.scope.Pager;
 import nb.scode.a3rapps.localdata.LocalDataComponent;
 import nb.scode.a3rapps.ui.pager.cart.CartComponent;

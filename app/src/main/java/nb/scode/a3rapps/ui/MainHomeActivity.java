@@ -94,8 +94,9 @@ public class MainHomeActivity extends BasePresenterActivity<MainView, MainPresen
 
     @Override
     public void cart() {
+
         try{
-            mTabLayout.getTabAt(1).getCustomView().setSelected(true);
+            mTabLayout.getTabAt(1).select();
         }
         catch (NullPointerException e){
             e.printStackTrace();

@@ -15,6 +15,7 @@ import nb.scode.a3rapps.BasePagerFragment;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.ui.pager.cart.CartFragment;
 import nb.scode.a3rapps.ui.pager.home.HomeFragment;
+import nb.scode.a3rapps.ui.pager.profile.ProfileFragment;
 
 /**
  * Created by neobyte on 3/2/2017.
@@ -24,16 +25,15 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     private int[] mTabsIcons = {
             R.drawable.home,
-            R.drawable.profile,
             R.drawable.bell,
+            R.drawable.profile,
             R.drawable.adjust};
 
     private enum TabItem {
         HOME(HomeFragment.class, R.string.title_home),
-        CART(CartFragment.class, R.string.title_cart); /*
-        ,
-
-        PROFILE(CountingFragment.class, R.string.title_profile),
+        CART(CartFragment.class, R.string.title_cart),
+        PROFILE(ProfileFragment.class, R.string.title_profile);
+            /*
         MORE(ShiftingFragment.class, R.string.title_more);
         */
 
