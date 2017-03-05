@@ -99,11 +99,12 @@ public class HomePresenter extends BasePresenter<HomeContract.View,HomeComponent
             @Override
             public void success() {
                 getView().finishGetData();
+                getView().hideLoadCart();
             }
 
             @Override
             public void failed(String message) {
-
+                getView().hideLoadCart();
             }
         });
     }

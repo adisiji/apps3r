@@ -1,4 +1,4 @@
-package nb.scode.a3rapps.ui;
+package nb.scode.a3rapps.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import nb.scode.a3rapps.App;
 import nb.scode.a3rapps.R;
+import nb.scode.a3rapps.ui.WebViewActivity;
 import nb.scode.a3rapps.ui.login.LoginActivity;
 import nb.scode.a3rapps.ui.pager.home.HomeFragment;
 
@@ -117,7 +118,13 @@ public class MainHomeActivity extends BasePresenterActivity<MainView, MainPresen
         mCallbackCart.finishGetData();
     }
 
+    @Override
+    public void hideLoadCart() {
+        mCallbackCart.hideLoadCart();
+    }
+
     public interface CallbackCart{
         void finishGetData();
+        void hideLoadCart();
     }
 }

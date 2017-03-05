@@ -83,7 +83,6 @@ public class HomeFragment extends BasePagerFragment<HomeContract.View, HomePrese
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.i(TAG, "onDestroyView: HomeFragment");
         callback = null;
         unbinder.unbind();
     }
@@ -123,6 +122,11 @@ public class HomeFragment extends BasePagerFragment<HomeContract.View, HomePrese
     @Override
     public void finishGetData(){
         callback.finishGetData();
+    }
+
+    @Override
+    public void hideLoadCart() {
+        callback.hideLoadCart();
     }
 
     @Override
@@ -279,6 +283,7 @@ public class HomeFragment extends BasePagerFragment<HomeContract.View, HomePrese
         void cart();
         void gudang();
         void finishGetData();
+        void hideLoadCart();
     }
 
 }

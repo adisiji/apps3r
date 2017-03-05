@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
@@ -30,9 +31,9 @@ import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.adapter.ExpandCartAdapter;
 import nb.scode.a3rapps.modelretro.DetailPackage;
 import nb.scode.a3rapps.modelretro.Products;
-import nb.scode.a3rapps.ui.MainHomeActivity;
 import nb.scode.a3rapps.ui.catat.CatatActivity;
 import nb.scode.a3rapps.ui.dialogs.PindahDialogFragment;
+import nb.scode.a3rapps.ui.main.MainHomeActivity;
 
 import static android.view.View.GONE;
 
@@ -47,8 +48,9 @@ public class CartFragment extends BasePagerFragment<CartContract.View, CartPrese
 
     private ExpandCartAdapter adapter;
     private Unbinder unbinder;
-    private String id;
 
+    @BindView(R.id.progbar_load_cart)
+    ProgressBar mProgressBar;
     @BindView(R.id.rvCart)
     RecyclerView rvCart;
     @BindView(R.id.tv_tercatat_maks_cart)
@@ -61,8 +63,6 @@ public class CartFragment extends BasePagerFragment<CartContract.View, CartPrese
     FancyButton btnPaketBaru;
     @BindView(R.id.switch_urutkan)
     SwitchCompat btnSwitch;
-
-    MainHomeActivity mHomeActivity;
 
     @Override
     public void finishGetData() {
@@ -85,21 +85,20 @@ public class CartFragment extends BasePagerFragment<CartContract.View, CartPrese
         unbinder = ButterKnife.bind(this,root);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setAutoMeasureEnabled(true);
+        showProgressDialog();
         rvCart.setLayoutManager(layoutManager);
         return root;
+    }
+
+    void showProgressDialog(){
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mHomeActivity = (MainHomeActivity)getActivity();
+        MainHomeActivity mHomeActivity = (MainHomeActivity)getActivity();
         mHomeActivity.setCallbackCart(this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
     }
 
     @Override
@@ -136,6 +135,22 @@ public class CartFragment extends BasePagerFragment<CartContract.View, CartPrese
         tvBatasSimpan.setText("Batas penyimpanan "+ String.valueOf(a) +" hari");
         tvTercatat.setText("Tercatat "+String.valueOf(b)+" dari maks "+
                 String.valueOf(c)+" produk");
+
+        if(rvCart.getVisibility() == View.GONE){
+            rvCart.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void hideLoad() {
+        hideLoadCart();
+    }
+
+    @Override
+    public void hideLoadCart() {
+        if(mProgressBar.getVisibility() == View.VISIBLE){
+            mProgressBar.setVisibility(GONE);
+        }
     }
 
     @Override

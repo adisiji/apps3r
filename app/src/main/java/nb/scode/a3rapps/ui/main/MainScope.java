@@ -1,4 +1,4 @@
-package nb.scode.a3rapps.ui;
+package nb.scode.a3rapps.ui.main;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

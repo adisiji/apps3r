@@ -1,4 +1,4 @@
-package nb.scode.a3rapps.ui;
+package nb.scode.a3rapps.ui.main;
 
 /**
  * Created by neobyte on 3/2/2017.

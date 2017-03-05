@@ -1,4 +1,4 @@
-package nb.scode.a3rapps.ui;
+package nb.scode.a3rapps.ui.main;
 
 import android.content.Context;
 import android.support.annotation.StringRes;
@@ -15,6 +15,7 @@ import nb.scode.a3rapps.BasePagerFragment;
 import nb.scode.a3rapps.R;
 import nb.scode.a3rapps.ui.pager.cart.CartFragment;
 import nb.scode.a3rapps.ui.pager.home.HomeFragment;
+import nb.scode.a3rapps.ui.pager.more.MoreFragment;
 import nb.scode.a3rapps.ui.pager.profile.ProfileFragment;
 
 /**
@@ -27,15 +28,14 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
             R.drawable.home,
             R.drawable.bell,
             R.drawable.profile,
-            R.drawable.adjust};
+            R.drawable.ic_more_horiz_white_48dp };
 
     private enum TabItem {
         HOME(HomeFragment.class, R.string.title_home),
         CART(CartFragment.class, R.string.title_cart),
-        PROFILE(ProfileFragment.class, R.string.title_profile);
-            /*
-        MORE(ShiftingFragment.class, R.string.title_more);
-        */
+        PROFILE(ProfileFragment.class, R.string.title_profile),
+        MORE(MoreFragment.class, R.string.title_more);
+
 
         private final Class<? extends BasePagerFragment<?, ?, ?>> fragmentClass;
         private final int titleResId;
@@ -84,7 +84,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return context.getString(tabItems[position].titleResId);
     }
-
 
 
     @Override

@@ -8,6 +8,8 @@ import nb.scode.a3rapps.ui.pager.cart.CartComponent;
 import nb.scode.a3rapps.ui.pager.cart.CartModule;
 import nb.scode.a3rapps.ui.pager.home.HomeComponent;
 import nb.scode.a3rapps.ui.pager.home.HomeModule;
+import nb.scode.a3rapps.ui.pager.more.MoreComponent;
+import nb.scode.a3rapps.ui.pager.more.MoreModule;
 import nb.scode.a3rapps.ui.pager.profile.ProfileComponent;
 import nb.scode.a3rapps.ui.pager.profile.ProfileModule;
 
@@ -23,5 +25,7 @@ public interface PagerComponent {
     CartComponent mCartComponent(CartModule cartPresenterModule);
 
     ProfileComponent mProfileComponent(ProfileModule profileModule);
+
+    MoreComponent mMoreComponent(MoreModule moreModule);
 
 }

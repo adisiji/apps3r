@@ -1,4 +1,4 @@
-package nb.scode.a3rapps.ui;
+package nb.scode.a3rapps.ui.main;
 
 import biz.laenger.android.together.BaseComponent;
 import dagger.Subcomponent;

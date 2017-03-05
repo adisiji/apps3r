@@ -9,8 +9,8 @@ import nb.scode.a3rapps.di.modules.DataModule;
 import nb.scode.a3rapps.di.modules.NetworkModule;
 import nb.scode.a3rapps.di.scope.PerApp;
 import nb.scode.a3rapps.network.ApiService;
-import nb.scode.a3rapps.ui.MainComponent;
-import nb.scode.a3rapps.ui.MainModule;
+import nb.scode.a3rapps.ui.main.MainComponent;
+import nb.scode.a3rapps.ui.main.MainModule;
 import nb.scode.a3rapps.util.NetworkManager;
 
 /**

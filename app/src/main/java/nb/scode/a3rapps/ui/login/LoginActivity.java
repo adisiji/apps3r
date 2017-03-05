@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import nb.scode.a3rapps.App;
 import nb.scode.a3rapps.R;
-import nb.scode.a3rapps.ui.MainHomeActivity;
+import nb.scode.a3rapps.ui.main.MainHomeActivity;
 import nb.scode.a3rapps.util.ActivityUtils;
 import nb.scode.a3rapps.util.CustomJsInterface;
 

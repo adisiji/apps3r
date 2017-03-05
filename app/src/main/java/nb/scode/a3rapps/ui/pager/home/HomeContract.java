@@ -26,6 +26,8 @@ public interface HomeContract {
 
         void finishGetData();
 
+        void hideLoadCart();
+
         void showFirstUpdate(String message);
 
         void showUpdateJneStatis(String message);

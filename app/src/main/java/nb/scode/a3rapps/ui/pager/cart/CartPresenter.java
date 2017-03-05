@@ -34,6 +34,7 @@ public class CartPresenter extends BasePresenter<CartContract.View,CartComponent
         super.bindView(view);
         if(mLoadFirst.isLoaded()){
             getView().setView();
+            getView().hideLoad();
         }
         else {
             mLoadFirst.setLoaded(true);
