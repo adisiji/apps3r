@@ -1,47 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fancy="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="5">
 
-    <View
-        android:layout_width="0dp"
+    <ImageView
+        android:id="@+id/iv_logo_more"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_more_item"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical">
-
-        <mehdi.sakout.fancybuttons.FancyButton
-            android:id="@+id/btn_spotify"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"
-            fancy:fb_borderColor="#FFFFFF"
-            fancy:fb_borderWidth="1dp"
-            fancy:fb_defaultColor="@color/orange_border"
-            fancy:fb_focusColor="@color/dark_orange_btn"
-            fancy:fb_fontIconResource="&#xf04b;"
-            fancy:fb_iconPosition="left"
-            fancy:fb_radius="30dp"
-            fancy:fb_text="SHUFFLE PLAY"
-            fancy:fb_textColor="#FFFFFF"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_marginTop="12dp"/>
 
 </LinearLayout>

@@ -46,9 +46,10 @@ ext {
     supportLibraryVersion = '25.2.0'
     playServicesVersion = '10.0.1'
     butterVersion = '8.5.1'
+    daggerVersion = '2.8'
     guavaVersion = '20.0'
     glideVersion='3.7.0'
-    daggerVersion = '2.8'
+    leakVersion = '1.5'
     retrofitVersion = '2.1.0'
     rxjavaVersion = '2.0.1'
 }
@@ -70,10 +71,15 @@ dependencies {
 
 
     /**Extension Lib**/
-    //Crasjlytics
+    //Crashlytics
     compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
+
+    //Leak Canary for memory detection
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakVersion"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakVersion"
 
     //Butterknife
     compile "com.jakewharton:butterknife:$butterVersion"
@@ -94,7 +100,7 @@ dependencies {
     compile 'com.squareup.okio:okio:1.7.0'
 
     //Gson
-    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.google.code.gson:gson:2.7'
 
     //Dagger
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
